@@ -1,0 +1,26 @@
+{
+  "name": "lahlang",
+  "version": "0.1.0",
+  "description": "A programming language for Singaporeans, by not a Singaporean yet. Can one lah!",
+  "main": "dist/index.js",
+  "bin": {
+    "lahlang": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "lahlang",
+    "singlish",
+    "language",
+    "singapore"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "@types/node": "^20.0.0"
+  }
+}
