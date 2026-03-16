@@ -1,0 +1,20 @@
+eh listen lah
+
+  oi "Hello World";
+
+  eh got a = 3;
+  eh got b = 0;
+
+  keep going lah (b less than 5) {
+    oi b;
+
+    confirm or not (b same same a) {
+      oi "b is equal to a";
+    } or maybe (b same same 0) {
+      oi "b is equal to zero";
+    }
+
+    eh change b = b + 1;
+  }
+
+ok lah bye

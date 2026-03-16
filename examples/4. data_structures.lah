@@ -1,0 +1,23 @@
+eh listen lah
+
+  // shiok: Arrays are "whole list"
+  eh got my_list = [1, 2, "shiok", can];
+  oi "My whole list:";
+  oi my_list;
+
+  // shiok: Iterate through list
+  oi "Iterating through list:";
+  every one also (item in my_list) {
+    oi "Item: " + item;
+  }
+
+  // shiok: Objects are "all the things"
+  eh got my_bag = {
+    food: "Chicken Rice",
+    price: 4.5,
+    tasty: can
+  };
+  oi "What's in my bag (all the things):";
+  oi my_bag;
+
+ok lah bye

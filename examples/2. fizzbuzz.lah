@@ -1,0 +1,16 @@
+eh listen lah
+
+  // shiok: Classic FizzBuzz logic using loops and if/else
+  one by one lah (i from 1 to 15) {
+    confirm or not (i % 15 same same 0) {
+      oi "FizzBuzz";
+    } or maybe (i % 3 same same 0) {
+      oi "Fizz";
+    } or maybe (i % 5 same same 0) {
+      oi "Buzz";
+    } if not then {
+      oi i;
+    }
+  }
+
+ok lah bye

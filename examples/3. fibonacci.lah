@@ -1,0 +1,16 @@
+eh listen lah
+
+  // shiok: Recursive function to find nth Fibonacci number
+  steady lah do this fib(n) {
+    confirm or not (n less than or same 1) {
+      here take n;
+    }
+    here take fib(n - 1) + fib(n - 2);
+  }
+
+  oi "Fibonacci sequence up to 7:";
+  one by one lah (i from 0 to 7) {
+    oi fib(i);
+  }
+
+ok lah bye

@@ -1,0 +1,28 @@
+eh listen lah
+
+  // shiok: Closures — captured env at declaration time
+  steady lah do this makeCounter(start) {
+    eh got count = start;
+    steady lah do this increment() {
+      eh change count = count + 1;
+      here take count;
+    }
+    here take increment;
+  }
+
+  eh got my_counter = makeCounter(10);
+  oi "Counter 1:";
+  oi my_counter();
+  oi my_counter();
+
+  // shiok: Complex boolean logic
+  eh got is_weekend = can;
+  eh got is_busy = cannot;
+
+  confirm or not (is_weekend and also dun want is_busy) {
+    oi "Go out and eat chicken rice lah!";
+  } or maybe (is_weekend or can is_busy) {
+    oi "Stay home and code lah.";
+  }
+
+ok lah bye

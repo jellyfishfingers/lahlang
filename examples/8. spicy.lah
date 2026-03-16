@@ -1,0 +1,10 @@
+eh listen lah
+
+  see how lah {
+    eh got x = bo jio;
+    chao cb assert x;
+  } aiyoh kena (err) {
+    oi "Kena liao: " + err;
+  }
+
+ok lah bye
