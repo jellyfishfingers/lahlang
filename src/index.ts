@@ -8,7 +8,7 @@ import { Interpreter } from "./interpreter";
 const args = process.argv.slice(2);
 
 if (args.length === 0) {
-  console.log("Lahlang v0.1.0 — Can one lah!");
+  console.log("Lahlang v0.1.0 — Can one lah! 🇸🇬");
   console.log("Usage: lahlang <file.lah>");
   process.exit(0);
 }
@@ -21,17 +21,28 @@ if (!filePath.endsWith(".lah")) {
 }
 
 if (!fs.existsSync(filePath)) {
-  console.error(`Cannot find file: ${filePath}`);
+  console.error(`Alamak! Cannot find file: ${filePath}`);
   process.exit(1);
 }
 
-const source = fs.readFileSync(filePath, "utf-8");
+try {
+  const source = fs.readFileSync(filePath, "utf-8");
 
-const lexer       = new Lexer(source);
-const tokens      = lexer.tokenize();
+  const lexer = new Lexer(source);
+  const tokens = lexer.tokenize();
 
-const parser      = new Parser(tokens);
-const ast         = parser.parse();
+  const parser = new Parser(tokens);
+  const ast = parser.parse();
 
-const interpreter = new Interpreter();
-interpreter.run(ast);
+  const interpreter = new Interpreter();
+  interpreter.run(ast);
+} catch (err: any) {
+  if (err.name === "TokKokError") {
+    console.error(`[TOK KOK] ${err.message}`);
+  } else if (err.name === "JialatError" || err.name === "BoJioError" || err.name === "SiaoError") {
+    console.error(`[JIALAT] ${err.message}`);
+  } else {
+    console.error(`[ALAMAK] Something went wrong sia: ${err.message || err}`);
+  }
+  process.exit(1);
+}
