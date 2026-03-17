@@ -12,6 +12,22 @@ Lahlang Extension provides syntax highlighting and basic language support for th
 
 ## Installation
 
+Install the **lahlang** extension directly from the VS Code Marketplace:
+
+1. Open **Visual Studio Code**.
+2. Open the **Extensions** view (`Ctrl+Shift+X`).
+3. Search for `lahlang`.
+4. Click **Install**.
+
+Alternatively, you can install it via the command line:
+```bash
+code --install-extension suryanshkushwaha.lahlang-vscode
+```
+
+## Development
+
+To set up the extension for local development:
+
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/suryanshkushwaha/lahlang.git
@@ -24,12 +40,8 @@ Lahlang Extension provides syntax highlighting and basic language support for th
    ```bash
    pnpm install
    ```
-4. **Build the extension (if applicable):**
-   ```bash
-   pnpm run build
-   ```
-5. **Launch VS Code and open the extension folder.**
-6. **Press `F5` to start a new Extension Development Host.**
+4. **Launch VS Code and open the extension folder.**
+5. **Press `F5` to start a new Extension Development Host.**
 
 ## Usage
 

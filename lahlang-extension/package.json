@@ -2,8 +2,9 @@
   "name": "lahlang-vscode",
   "displayName": "lahlang",
   "description": "Syntax highlighting for the lahlang programming language",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "suryanshkushwaha",
+  "icon": "icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/suryanshkushwaha/lahlang.git",
