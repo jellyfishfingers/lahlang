@@ -1,15 +1,8 @@
 import { Token, TokenType } from "./tokens";
-class TokKokError extends Error {
-  constructor(msg: string, line: number) {
-    super(`Tok kok lah! ${msg} (line ${line})`);
-    this.name = "TokKokError";
-  }
-}
+import { TokKokError } from "./errors";
 
 export type ASTNode =
-
-
-| ProgramNode
+  | ProgramNode
   | VarDeclarationNode
   | ConstDeclarationNode
   | ReassignNode
@@ -35,13 +28,70 @@ export type ASTNode =
   | BooleanLiteralNode
   | NullLiteralNode
   | UndefinedLiteralNode
+  | ErrorLiteralNode
+  | TypeLiteralNode
   | IdentifierNode
   | BinaryExprNode
   | UnaryExprNode
   | ArrayLiteralNode
   | ObjectLiteralNode
   | CallExprNode
-  | ElseIfNode;
+  | ElseIfNode
+  | SwitchNode
+  | SwitchCaseNode
+  | AnonymousFunctionNode
+  | CheckNode
+  | InputNode
+  | MemberExprNode;
+
+export interface ErrorLiteralNode {
+  type: "ErrorLiteral";
+  variant: TokenType;
+}
+
+export interface TypeLiteralNode {
+  type: "TypeLiteral";
+  variant: TokenType;
+}
+
+export interface CheckNode {
+  type: "Check";
+  value: ASTNode;
+  isIntense?: boolean;
+  isDeprecated?: boolean;
+}
+
+export interface InputNode {
+  type: "Input";
+  prompt: ASTNode;
+  isIntense?: boolean;
+  isDeprecated?: boolean;
+}
+
+export interface MemberExprNode {
+  type: "MemberExpr";
+  object: ASTNode;
+  property: string;
+}
+
+export interface SwitchNode {
+  type: "Switch";
+  discriminant: ASTNode;
+  cases: SwitchCaseNode[];
+  defaultCase: ASTNode[] | null;
+}
+
+export interface SwitchCaseNode {
+  type: "SwitchCase";
+  test: ASTNode;
+  consequent: ASTNode[];
+}
+
+export interface AnonymousFunctionNode {
+  type: "AnonymousFunction";
+  params: string[];
+  body: ASTNode[];
+}
 export interface ConstDeclarationNode {
   type: "ConstDeclaration";
   name: string;
@@ -49,8 +99,9 @@ export interface ConstDeclarationNode {
 }
 export interface ReassignNode {
   type: "Reassign";
-  name: string;
+  target: ASTNode;
   value: ASTNode;
+  op: string; // "=" or "+=" or "-="
 }
 export interface PrintVerboseNode {
   type: "PrintVerbose";
@@ -83,7 +134,7 @@ export interface ForNode {
 export interface ForEachNode {
   type: "ForEach";
   name: string;
-  arr: string;
+  arr: ASTNode;
   body: ASTNode[];
 }
 export interface BreakNode {
@@ -167,10 +218,14 @@ export interface VarDeclarationNode {
   type: "VarDeclaration";
   name: string;
   value: ASTNode;
+  isIntense?: boolean;
+  isDeprecated?: boolean;
 }
 export interface PrintNode {
   type: "Print";
   value: ASTNode;
+  isIntense?: boolean;
+  isDeprecated?: boolean;
 }
 export interface StringLiteralNode {
   type: "StringLiteral";
@@ -209,7 +264,7 @@ export class Parser {
   parse(): ProgramNode {
     this.expect(TokenType.EH_LISTEN_LAH);
     const body: ASTNode[] = [];
-    while (!this.match(TokenType.OK_LAH_BYE)) {
+    while (!this.match(TokenType.OK_LAH_BYE) && !this.match(TokenType.EOF)) {
       body.push(this.parseStatement());
     }
     this.expect(TokenType.OK_LAH_BYE);
@@ -217,58 +272,108 @@ export class Parser {
   }
 
   private parseStatement(): ASTNode {
+    let intense = false;
+    let deprecated = false;
+
+    while (this.match(TokenType.SI_BEH) || this.match(TokenType.OLD_LIAO)) {
+      if (this.match(TokenType.SI_BEH)) {
+        this.next();
+        intense = true;
+      } else {
+        this.next();
+        deprecated = true;
+      }
+    }
+
     const token = this.peek();
+    let node: ASTNode;
     switch (token.type) {
       case TokenType.EH_GOT:
-        return this.parseVarDeclaration();
+        node = this.parseVarDeclaration();
+        break;
       case TokenType.CONFIRM_GOT:
-        return this.parseConstDeclaration();
+        node = this.parseConstDeclaration();
+        break;
       case TokenType.EH_CHANGE:
-        return this.parseReassign();
+      case TokenType.ADD_SOME_MORE:
+      case TokenType.MINUS_A_BIT:
+        node = this.parseReassign();
+        break;
       case TokenType.OI:
-        return this.parsePrint();
+        node = this.parsePrint();
+        break;
       case TokenType.OI_LISTEN:
-        return this.parsePrintVerbose();
+        node = this.parsePrintVerbose();
+        break;
       case TokenType.CONFIRM_OR_NOT:
-        return this.parseIf();
+        node = this.parseIf();
+        break;
+      case TokenType.WHICH_ONE_LAH:
+        node = this.parseSwitch();
+        break;
       case TokenType.KEEP_GOING_LAH:
-        return this.parseWhile();
+        node = this.parseWhile();
+        break;
       case TokenType.ONE_BY_ONE_LAH:
-        return this.parseFor();
+        node = this.parseFor();
+        break;
       case TokenType.EVERY_ONE_ALSO:
-        return this.parseForEach();
+        node = this.parseForEach();
+        break;
       case TokenType.SIAO_LIAO_STOP:
       case TokenType.KNN_STOP:
-        return this.parseBreak();
+        node = this.parseBreak();
+        break;
       case TokenType.SKIP_LAH:
-        return this.parseContinue();
+        node = this.parseContinue();
+        break;
       case TokenType.STEADY_LAH_DO_THIS:
-        return this.parseFunctionDeclaration();
+        node = this.parseFunctionDeclaration();
+        break;
       case TokenType.HERE_TAKE:
-        return this.parseReturn();
+        node = this.parseReturn();
+        break;
       case TokenType.EH_DO_THIS:
-        return this.parseCallStatement();
+        node = this.parseCallStatement();
+        break;
       case TokenType.SEE_HOW_LAH:
-        return this.parseTryCatch();
+        node = this.parseTryCatch();
+        break;
       case TokenType.JIALAT_THROW:
       case TokenType.CCB_THROW:
-        return this.parseThrow();
+      case TokenType.KNN_CRASH:
+      case TokenType.PUKI_PANIC:
+      case TokenType.CB_LAH:
+      case TokenType.BABI_INPUT:
+        node = this.parseThrow();
+        break;
       case TokenType.PAISEH_WARN:
-        return this.parseWarn();
+        node = this.parseWarn();
+        break;
       case TokenType.HONG_GAN_LAH:
       case TokenType.CHAO_CB_ASSERT:
-        return this.parseAssert();
+        node = this.parseAssert();
+        break;
+      case TokenType.EH_CHECK_THIS:
+        node = this.parseCheck();
+        break;
       case TokenType.CHIONG_BRING_IN:
-        return this.parseImport();
+        node = this.parseImport();
+        break;
       case TokenType.SHARE_OUT:
-        return this.parseExport();
+        node = this.parseExport();
+        break;
       default:
         throw new TokKokError(`Unexpected token: ${token.type}`, token.line);
     }
+
+    if (intense) (node as any).isIntense = true;
+    if (deprecated) (node as any).isDeprecated = true;
+    return node;
   }
 
   // --- Statement Parsers ---
-  private parseConstDeclaration(): ASTNode {
+  private parseConstDeclaration(): ConstDeclarationNode {
     this.expect(TokenType.CONFIRM_GOT);
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.expect(TokenType.EQUALS);
@@ -277,23 +382,28 @@ export class Parser {
     return { type: "ConstDeclaration", name, value };
   }
 
-  private parseReassign(): ASTNode {
-    this.expect(TokenType.EH_CHANGE);
-    const name = this.expect(TokenType.IDENTIFIER).value;
+  private parseReassign(): ReassignNode {
+    const opToken = this.next();
+    const op = opToken.type === TokenType.EH_CHANGE ? "=" : 
+               opToken.type === TokenType.ADD_SOME_MORE ? "+=" : "-=";
+    const target = this.parsePrimary();
+    if (target.type !== "Identifier" && target.type !== "MemberExpr") {
+      throw new TokKokError(`Invalid assignment target: ${target.type}`, opToken.line);
+    }
     this.expect(TokenType.EQUALS);
     const value = this.parseExpression();
     this.consumeTerminator();
-    return { type: "Reassign", name, value };
+    return { type: "Reassign", target, value, op };
   }
 
-  private parsePrintVerbose(): ASTNode {
+  private parsePrintVerbose(): PrintVerboseNode {
     this.expect(TokenType.OI_LISTEN);
     const value = this.parseExpression();
     this.consumeTerminator();
     return { type: "PrintVerbose", value };
   }
 
-  private parseIf(): ASTNode {
+  private parseIf(): IfNode {
     this.expect(TokenType.CONFIRM_OR_NOT);
     this.expect(TokenType.LPAREN);
     const test = this.parseExpression();
@@ -309,7 +419,8 @@ export class Parser {
       this.expect(TokenType.LBRACE);
       const altBody = this.parseBlock();
       alternates.push({ type: "ElseIf", test: altTest, body: altBody });
-    }    let otherwise = null;
+    }
+    let otherwise = null;
     if (this.match(TokenType.IF_NOT_THEN)) {
       this.next();
       this.expect(TokenType.LBRACE);
@@ -318,7 +429,7 @@ export class Parser {
     return { type: "If", test, consequent, alternates, otherwise };
   }
 
-  private parseWhile(): ASTNode {
+  private parseWhile(): WhileNode {
     this.expect(TokenType.KEEP_GOING_LAH);
     this.expect(TokenType.LPAREN);
     const test = this.parseExpression();
@@ -328,7 +439,7 @@ export class Parser {
     return { type: "While", test, body };
   }
 
-  private parseFor(): ASTNode {
+  private parseFor(): ForNode {
     this.expect(TokenType.ONE_BY_ONE_LAH);
     this.expect(TokenType.LPAREN);
     const name = this.expect(TokenType.IDENTIFIER).value;
@@ -342,31 +453,31 @@ export class Parser {
     return { type: "For", name, start, end, body };
   }
 
-  private parseForEach(): ASTNode {
+  private parseForEach(): ForEachNode {
     this.expect(TokenType.EVERY_ONE_ALSO);
     this.expect(TokenType.LPAREN);
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.expect(TokenType.IN);
-    const arr = this.expect(TokenType.IDENTIFIER).value;
+    const arr = this.parseExpression();
     this.expect(TokenType.RPAREN);
     this.expect(TokenType.LBRACE);
     const body = this.parseBlock();
     return { type: "ForEach", name, arr, body };
   }
 
-  private parseBreak(): ASTNode {
+  private parseBreak(): BreakNode {
     const token = this.next();
     this.consumeTerminator();
     return { type: "Break", variant: token.type };
   }
 
-  private parseContinue(): ASTNode {
+  private parseContinue(): ContinueNode {
     this.expect(TokenType.SKIP_LAH);
     this.consumeTerminator();
     return { type: "Continue" };
   }
 
-  private parseFunctionDeclaration(): ASTNode {
+  private parseFunctionDeclaration(): FunctionDeclarationNode {
     this.expect(TokenType.STEADY_LAH_DO_THIS);
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.expect(TokenType.LPAREN);
@@ -389,14 +500,14 @@ export class Parser {
     return params;
   }
 
-  private parseReturn(): ASTNode {
+  private parseReturn(): ReturnNode {
     this.expect(TokenType.HERE_TAKE);
     const value = this.parseExpression();
     this.consumeTerminator();
     return { type: "Return", value };
   }
 
-  private parseCallStatement(): ASTNode {
+  private parseCallStatement(): CallStatementNode {
     this.expect(TokenType.EH_DO_THIS);
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.expect(TokenType.LPAREN);
@@ -417,7 +528,7 @@ export class Parser {
     return args;
   }
 
-  private parseTryCatch(): ASTNode {
+  private parseTryCatch(): TryCatchNode {
     this.expect(TokenType.SEE_HOW_LAH);
     this.expect(TokenType.LBRACE);
     const tryBlock = this.parseBlock();
@@ -436,35 +547,48 @@ export class Parser {
     return { type: "TryCatch", tryBlock, errName, catchBlock, finallyBlock };
   }
 
-  private parseThrow(): ASTNode {
+  private parseThrow(): ThrowNode {
     const token = this.next();
     const value = this.parseExpression();
     this.consumeTerminator();
     return { type: "Throw", variant: token.type, value };
   }
 
-  private parseWarn(): ASTNode {
+  private parseWarn(): WarnNode {
     this.expect(TokenType.PAISEH_WARN);
     const value = this.parseExpression();
     this.consumeTerminator();
     return { type: "Warn", value };
   }
 
-  private parseAssert(): ASTNode {
+  private parseAssert(): AssertNode {
     const token = this.next();
     const value = this.parseExpression();
     this.consumeTerminator();
     return { type: "Assert", variant: token.type, value };
   }
 
-  private parseImport(): ASTNode {
+  private parseCheck(): CheckNode {
+    this.expect(TokenType.EH_CHECK_THIS);
+    const value = this.parseExpression();
+    this.consumeTerminator();
+    return { type: "Check", value };
+  }
+
+  private parseInput(): InputNode {
+    this.expect(TokenType.ASK_LAH);
+    const prompt = this.parseExpression();
+    return { type: "Input", prompt };
+  }
+
+  private parseImport(): ImportNode {
     this.expect(TokenType.CHIONG_BRING_IN);
     const module = this.expect(TokenType.STRING).value;
     this.consumeTerminator();
     return { type: "Import", module };
   }
 
-  private parseExport(): ASTNode {
+  private parseExport(): ExportNode {
     this.expect(TokenType.SHARE_OUT);
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.consumeTerminator();
@@ -570,57 +694,148 @@ export class Parser {
 
   private parsePrimary(): ASTNode {
     const token = this.peek();
+    let node: ASTNode;
+
     // Literals
     switch (token.type) {
       case TokenType.STRING:
         this.next();
-        return { type: "StringLiteral", value: token.value };
+        node = { type: "StringLiteral", value: token.value };
+        break;
       case TokenType.NUMBER:
         this.next();
-        return { type: "NumberLiteral", value: Number(token.value) };
+        node = { type: "NumberLiteral", value: Number(token.value) };
+        break;
       case TokenType.CAN:
         this.next();
-        return { type: "BooleanLiteral", value: true };
+        node = { type: "BooleanLiteral", value: true };
+        break;
       case TokenType.CANNOT:
         this.next();
-        return { type: "BooleanLiteral", value: false };
+        node = { type: "BooleanLiteral", value: false };
+        break;
       case TokenType.BO_JIO:
         this.next();
-        return { type: "NullLiteral" };
+        node = { type: "NullLiteral" };
+        break;
       case TokenType.BLUR_BLUR:
         this.next();
-        return { type: "UndefinedLiteral" };
+        node = { type: "UndefinedLiteral" };
+        break;
+      case TokenType.JIALAT_ERROR:
+      case TokenType.BO_JIO_ERROR:
+      case TokenType.SIAO_ERROR:
+      case TokenType.TOK_KOK_ERROR:
+      case TokenType.TAN_KU_KU_ERROR:
+      case TokenType.SUAY_ERROR:
+      case TokenType.WAH_LAU_ERROR:
+      case TokenType.GONE_CASE:
+      case TokenType.CB_ERROR:
+      case TokenType.LAN_JIAO_ERROR:
+      case TokenType.CCB_ERROR:
+      case TokenType.CHAO_CB_ERROR:
+        this.next();
+        node = { type: "ErrorLiteral", variant: token.type };
+        break;
+      case TokenType.WORDS:
+      case TokenType.NOMBOR:
+      case TokenType.CAN_CANNOT:
+      case TokenType.WHOLE_LIST:
+      case TokenType.ALL_THE_THINGS:
+        this.next();
+        node = { type: "TypeLiteral", variant: token.type };
+        break;
+      case TokenType.ASK_LAH:
+        node = this.parseInput();
+        break;
+      case TokenType.ONE_TIME_ONLY:
+        node = this.parseAnonymousFunction();
+        break;
       case TokenType.IDENTIFIER:
-        // Function call or variable
         const id = this.next().value;
         if (this.match(TokenType.LPAREN)) {
           this.next();
           const args = this.parseArgs();
           this.expect(TokenType.RPAREN);
-          return { type: "CallExpr", name: id, args };
+          node = { type: "CallExpr", name: id, args };
+        } else {
+          node = { type: "Identifier", name: id };
         }
-        return { type: "Identifier", name: id };
+        break;
       case TokenType.LPAREN:
         this.next();
         const expr = this.parseExpression();
         this.expect(TokenType.RPAREN);
-        return expr;
+        node = expr;
+        break;
       case TokenType.LBRACKET:
         this.next();
         const items = this.parseArrayItems();
         this.expect(TokenType.RBRACKET);
-        return { type: "ArrayLiteral", items };
+        node = { type: "ArrayLiteral", items };
+        break;
       case TokenType.LBRACE:
         this.next();
         const obj = this.parseObjectItems();
         this.expect(TokenType.RBRACE);
-        return { type: "ObjectLiteral", obj };
+        node = { type: "ObjectLiteral", obj };
+        break;
       default:
         throw new TokKokError(
           `Unexpected primary token: ${token.type}`,
           token.line,
         );
     }
+
+    // Member access (dot)
+    while (this.match(TokenType.DOT)) {
+      this.next();
+      const property = this.expect(TokenType.IDENTIFIER).value;
+      node = { type: "MemberExpr", object: node, property };
+    }
+
+    return node;
+  }
+
+  private parseSwitch(): SwitchNode {
+    this.expect(TokenType.WHICH_ONE_LAH);
+    this.expect(TokenType.LPAREN);
+    const discriminant = this.parseExpression();
+    this.expect(TokenType.RPAREN);
+    this.expect(TokenType.LBRACE);
+    const cases: SwitchCaseNode[] = [];
+    let defaultCase: ASTNode[] | null = null;
+    while (!this.match(TokenType.RBRACE) && !this.match(TokenType.EOF)) {
+      if (this.match(TokenType.IF_ITS)) {
+        cases.push(this.parseSwitchCase());
+      } else if (this.match(TokenType.LAST_RESORT)) {
+        this.next();
+        this.expect(TokenType.LBRACE);
+        defaultCase = this.parseBlock();
+      } else {
+        throw new TokKokError(`Unexpected token in switch: ${this.peek().type}`, this.peek().line);
+      }
+    }
+    this.expect(TokenType.RBRACE);
+    return { type: "Switch", discriminant, cases, defaultCase };
+  }
+
+  private parseSwitchCase(): SwitchCaseNode {
+    this.expect(TokenType.IF_ITS);
+    const test = this.parseExpression();
+    this.expect(TokenType.LBRACE);
+    const consequent = this.parseBlock();
+    return { type: "SwitchCase", test, consequent };
+  }
+
+  private parseAnonymousFunction(): AnonymousFunctionNode {
+    this.expect(TokenType.ONE_TIME_ONLY);
+    this.expect(TokenType.LPAREN);
+    const params = this.parseParams();
+    this.expect(TokenType.RPAREN);
+    this.expect(TokenType.LBRACE);
+    const body = this.parseBlock();
+    return { type: "AnonymousFunction", params, body };
   }
 
   private parseArrayItems(): ASTNode[] {
@@ -683,10 +898,19 @@ export class Parser {
   }
 
   private peek(): Token {
+    while (
+      this.pos < this.tokens.length &&
+      (this.tokens[this.pos].type === TokenType.COMMENT ||
+        this.tokens[this.pos].type === TokenType.MULTILINE_COMMENT)
+    ) {
+      this.pos++;
+    }
     return this.tokens[this.pos];
   }
 
   private next(): Token {
-    return this.tokens[this.pos++];
+    const token = this.peek();
+    this.pos++;
+    return token;
   }
 }

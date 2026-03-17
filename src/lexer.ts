@@ -1,4 +1,5 @@
 import { Token, TokenType, KEYWORDS } from "./tokens";
+import { TokKokError } from "./errors";
 
 export class Lexer {
   private source: string;
@@ -23,28 +24,42 @@ export class Lexer {
 
       // Single-line comment
       if (this.source.startsWith("// shiok:", this.pos)) {
+        const startCol = this.col;
         this.pos += 9;
         this.col += 9;
+        let comment = "";
         while (this.pos < this.source.length && this.currentChar() !== "\n") {
+          comment += this.currentChar();
           this.pos++;
           this.col++;
         }
+        tokens.push({
+          type: TokenType.COMMENT,
+          value: comment.trim(),
+          line: this.line,
+          col: startCol,
+        });
         continue;
       }
 
       // Multi-line comment
       if (this.source.startsWith("wahlau start", this.pos)) {
+        const startCol = this.col;
+        const startLine = this.line;
         this.pos += "wahlau start".length;
         this.col += "wahlau start".length;
+        let comment = "";
         while (
           this.pos < this.source.length &&
           !this.source.startsWith("wahlau end", this.pos)
         ) {
           if (this.currentChar() === "\n") {
+            comment += this.currentChar();
             this.pos++;
             this.line++;
             this.col = 1;
           } else {
+            comment += this.currentChar();
             this.pos++;
             this.col++;
           }
@@ -53,6 +68,12 @@ export class Lexer {
           this.pos += "wahlau end".length;
           this.col += "wahlau end".length;
         }
+        tokens.push({
+          type: TokenType.MULTILINE_COMMENT,
+          value: comment.trim(),
+          line: startLine,
+          col: startCol,
+        });
         continue;
       }
 
@@ -64,7 +85,7 @@ export class Lexer {
         let str = "";
         while (this.pos < this.source.length && this.currentChar() !== '"') {
           if (this.currentChar() === "\n") {
-            throw new TokKokError('"', this.line, this.col);
+             throw new TokKokError("Unterminated string literal lah!", this.line, this.col);
           }
           str += this.currentChar();
           this.pos++;
@@ -74,7 +95,7 @@ export class Lexer {
           this.pos++;
           this.col++;
         } else {
-          throw new TokKokError('"', this.line, this.col);
+           throw new TokKokError("Unterminated string literal lah!", this.line, this.col);
         }
         tokens.push({
           type: TokenType.STRING,
@@ -189,6 +210,7 @@ export class Lexer {
         "*": TokenType.MULTIPLY,
         "/": TokenType.DIVIDE,
         "%": TokenType.MODULO,
+        "!": TokenType.DUN_WANT,
       };
       if (punctMap[ch]) {
         tokens.push({
@@ -203,7 +225,7 @@ export class Lexer {
       }
 
       // Unrecognised character
-      throw new TokKokError(ch, this.line, this.col);
+      throw new TokKokError(`Eh what is this character: '${ch}'?`, this.line, this.col);
     }
     // EOF token
     tokens.push({
@@ -251,9 +273,3 @@ export class Lexer {
   }
 }
 
-class TokKokError extends Error {
-  constructor(char: string, line: number, col: number) {
-    super(`Eh what is this character: '${char}' at line ${line}? Tok kok lah!`);
-    this.name = "TokKokError";
-  }
-}

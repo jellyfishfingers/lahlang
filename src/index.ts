@@ -39,10 +39,13 @@ try {
 } catch (err: any) {
   if (err.name === "TokKokError") {
     console.error(`[TOK KOK] ${err.message}`);
-  } else if (err.name === "JialatError" || err.name === "BoJioError" || err.name === "SiaoError") {
-    console.error(`[JIALAT] ${err.message}`);
+  } else if (err.name === "JialatError" || err.name === "BoJioError" || err.name === "SiaoError" || err.name === "CcbError" || err.name === "CbError" || err.name === "LanJiaoError") {
+    console.error(`[RUNTIME ERROR] ${err.name}: ${err.message}`);
+  } else if (err.name === "GoneCase" || err.name === "ChaoCbError") {
+     // Already handled in interpreter.run for fatal ones, but if it bubbles up:
+    console.error(`[FATAL] ${err.name}: ${err.message}`);
   } else {
-    console.error(`[ALAMAK] Something went wrong sia: ${err.message || err}`);
+    console.error(`[ALAMAK] Something went wrong sia: ${err.name || "Error"}: ${err.message || err}`);
   }
   process.exit(1);
 }
