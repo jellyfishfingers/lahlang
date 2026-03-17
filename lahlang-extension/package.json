@@ -2,7 +2,7 @@
   "name": "lahlang-vscode",
   "displayName": "lahlang",
   "description": "Syntax highlighting for the lahlang programming language",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "suryanshkushwaha",
   "icon": "icon.png",
   "repository": {
@@ -27,7 +27,11 @@
         "extensions": [
           ".lah"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icon.png",
+          "dark": "./icon.png"
+        }
       }
     ],
     "grammars": [

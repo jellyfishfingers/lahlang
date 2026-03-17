@@ -25,6 +25,7 @@ Lahlang is a fun, expressive programming language inspired by Singlish and Singa
 ## Features
 
 - **Singlish Syntax:** Keywords like `eh listen lah`, `ok lah bye`, `oi`, `confirm or not`, `keep going lah`, etc.
+- **VS Code Support:** Get syntax highlighting with the [Lahlang VS Code Extension](https://marketplace.visualstudio.com/items?itemName=suryanshkushwaha.lahlang-vscode).
 - **Variables & Constants:** `eh got`, `confirm got`
 - **Control Flow:** `confirm or not` (if), `or maybe` (else if), `if not then` (else), `keep going lah` (while), `one by one lah` (for), `every one also` (foreach)
 - **Functions:** `steady lah do this`, `here take`, `eh do this`, `one time only`
