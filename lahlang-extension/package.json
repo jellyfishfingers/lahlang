@@ -1,0 +1,45 @@
+{
+  "name": "lahlang-vscode",
+  "displayName": "lahlang",
+  "description": "Syntax highlighting for the lahlang programming language",
+  "version": "0.1.2",
+  "publisher": "suryanshkushwaha",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suryanshkushwaha/lahlang.git",
+    "directory": "lahlang-extension"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "lahlang",
+        "aliases": [
+          "Lahlang",
+          "lahlang"
+        ],
+        "extensions": [
+          ".lah"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icon.png",
+          "dark": "./icon.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "lahlang",
+        "scopeName": "source.lah",
+        "path": "./syntaxes/lahlang.tmLanguage.json"
+      }
+    ]
+  }
+}
