@@ -1,0 +1,164 @@
+{
+  "name": "lahlang",
+  "scopeName": "source.lah",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#keywords" },
+    { "include": "#storage" },
+    { "include": "#constants" },
+    { "include": "#error_types" },
+    { "include": "#operators" },
+    { "include": "#support" },
+    { "include": "#punctuation" },
+    { "include": "#numbers" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.lah",
+          "match": "shiok:.*"
+        },
+        {
+          "name": "comment.block.lah",
+          "begin": "wahlau start",
+          "end": "wahlau end"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.lah",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.lah",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.lah",
+          "begin": "'",
+          "end": "'"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.lah",
+          "match": "\\b(confirm or not|if not then|which one lah|or maybe|if it's|last resort|keep going lah|one by one lah|every one also|siao liao stop|knn stop|skip lah|here take|see how lah|aiyoh kena|confirm do|jialat throw|paiseh warn|hong gan lah|chao cb assert|kan ni na crash|ccb throw|puki panic|babi input|cb lah)\\b"
+        },
+        {
+          "name": "keyword.control.module.lah",
+          "match": "\\b(eh listen lah|ok lah bye|chiong bring in|share out)\\b"
+        },
+        {
+          "name": "keyword.control.loop.lah",
+          "match": "\\b(from|to|in)\\b"
+        },
+        {
+          "name": "storage.type.function.lah",
+          "match": "\\b(steady lah do this|one time only)\\b"
+        },
+        {
+          "name": "support.function.lah",
+          "match": "\\b(oi listen|ask lah|oi|eh do this|eh check this)\\b"
+        },
+        {
+          "name": "keyword.other.modifier.lah",
+          "match": "\\b(si beh|old liao)\\b"
+        }
+      ]
+    },
+    "storage": {
+      "patterns": [
+        {
+          "name": "storage.type.lah",
+          "match": "\\b(eh got|confirm got|eh change)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.lah",
+          "match": "\\b(can|cannot|bo jio|blur blur)\\b"
+        }
+      ]
+    },
+    "error_types": {
+      "patterns": [
+        {
+          "name": "support.type.exception.lah",
+          "match": "\\b(TanKuKuError|ChaoCbError|LanJiaoError|TokKokError|WahLauError|JialatError|BoJioError|SuayError|SiaoError|CcbError|CbError|GoneCase)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.lah",
+          "match": "\\b(more than or same|less than or same|same same|not same|more than|less than)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.lah",
+          "match": "\\b(and also|or can|dun want)\\b"
+        },
+        {
+          "name": "keyword.operator.assignment.lah",
+          "match": "\\b(add some more|minus a bit)\\b"
+        },
+        {
+          "name": "keyword.operator.symbol.lah",
+          "match": "(\\+|\\-|\\*|\\/|%|\\=|\\!)"
+        }
+      ]
+    },
+    "support": {
+      "patterns": [
+        {
+          "name": "support.type.lah",
+          "match": "\\b(all the things|whole list|can cannot|nombor|words)\\b"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.terminator.lah",
+          "match": "\\b(lah)\\b|;"
+        },
+        {
+          "name": "punctuation.separator.lah",
+          "match": "(\\.|,|:)"
+        },
+        {
+          "name": "punctuation.section.lah",
+          "match": "(\\{|\\}|\\[|\\]|\\(|\\))"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.lah",
+          "match": "\\b([0-9]+(\\.[0-9]+)?)\\b"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.readwrite.lah",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

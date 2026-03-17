@@ -1,0 +1,10 @@
+.git
+.vscode
+.vscode-test
+node_modules
+pnpm-lock.yaml
+tsconfig.json
+vsc-extension-quickstart.md
+*.vsix
+tests
+src
