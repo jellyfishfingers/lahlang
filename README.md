@@ -5,6 +5,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Documentation 📚](#documentation-)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -21,6 +22,21 @@
 ## Overview
 
 Lahlang is a fun, expressive programming language inspired by Singlish and Singaporean culture. It’s designed for learning, experimentation, and joy, with syntax and keywords that reflect local slang and humor.
+
+## Documentation 📚
+
+For a complete guide on how to use Lahlang, check out our extensive documentation:
+
+1.  **[Installation Guide](./docs/01-Installation.md)**: Node.js/pnpm prerequisites and global CLI installation.
+2.  **[VS Code Extension](./docs/02-VSCode-Extension.md)**: How to get syntax highlighting.
+3.  **[Getting Started](./docs/03-Getting-Started.md)**: Your first `.lah` file and "Hello World".
+4.  **[Variables and Types](./docs/04-Variables-and-Types.md)**: Data handling with Singlish types.
+5.  **[Control Flow](./docs/05-Control-Flow.md)**: Logic with `confirm or not` and `which one lah`.
+6.  **[Loops](./docs/06-Loops.md)**: Iteration with `keep going lah` and `every one also`.
+7.  **[Functions](./docs/07-Functions.md)**: Defining and calling reusable blocks.
+8.  **[Error Handling](./docs/08-Error-Handling.md)**: Wholesome and **Spicy 🌶️** tiers.
+9.  **[CLI Reference](./docs/09-CLI-Reference.md)**: Commands, debugging, and meta keywords.
+10. **[Examples Walkthrough](./docs/10-Examples-Walkthrough.md)**: Deep dive into the `examples/` folder.
 
 ## Features
 
