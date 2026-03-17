@@ -478,7 +478,7 @@ export class Interpreter {
         const prompt = this.evaluate(node.prompt);
         process.stdout.write(`[ASK LAH] ${prompt}: `);
         const buffer = Buffer.alloc(1024);
-        const bytesRead = fs.readSync(0, buffer, 0, 1024);
+        const bytesRead = fs.readSync(0, buffer, 0, 1024, null);
         return buffer.toString("utf8", 0, bytesRead).trim();
       }
       case "MemberExpr": {
