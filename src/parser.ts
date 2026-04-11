@@ -42,7 +42,20 @@ export type ASTNode =
   | AnonymousFunctionNode
   | CheckNode
   | InputNode
-  | MemberExprNode;
+  | MemberExprNode
+  | IndexExprNode
+  | MethodCallExprNode
+  | SleepNode
+  | ChopeNode
+  | ActBlurNode
+  | DoWhileNode
+  | SaboNode
+  | SweeNode
+  | KaypohExprNode
+  | GostanExprNode
+  | AgakAgakExprNode
+  | MakanExprNode
+  | TabaoExprNode;
 
 export interface ErrorLiteralNode {
   type: "ErrorLiteral";
@@ -72,6 +85,75 @@ export interface MemberExprNode {
   type: "MemberExpr";
   object: ASTNode;
   property: string;
+}
+
+export interface IndexExprNode {
+  type: "IndexExpr";
+  object: ASTNode;
+  index: ASTNode;
+}
+
+export interface MethodCallExprNode {
+  type: "MethodCallExpr";
+  object: ASTNode;
+  method: string;
+  args: ASTNode[];
+}
+
+export interface SleepNode {
+  type: "Sleep";
+  duration: ASTNode;
+}
+
+export interface ChopeNode {
+  type: "Chope";
+  name: string;
+}
+
+export interface ActBlurNode {
+  type: "ActBlur";
+  body: ASTNode[];
+}
+
+export interface DoWhileNode {
+  type: "DoWhile";
+  body: ASTNode[];
+  test: ASTNode;
+}
+
+export interface SaboNode {
+  type: "Sabo";
+  target: ASTNode;
+}
+
+export interface SweeNode {
+  type: "Swee";
+  value: ASTNode;
+}
+
+export interface KaypohExprNode {
+  type: "KaypohExpr";
+  expr: ASTNode;
+}
+
+export interface GostanExprNode {
+  type: "GostanExpr";
+  expr: ASTNode;
+}
+
+export interface AgakAgakExprNode {
+  type: "AgakAgakExpr";
+  expr: ASTNode;
+}
+
+export interface MakanExprNode {
+  type: "MakanExpr";
+  expr: ASTNode;
+}
+
+export interface TabaoExprNode {
+  type: "TabaoExpr";
+  expr: ASTNode;
 }
 
 export interface SwitchNode {
@@ -363,6 +445,31 @@ export class Parser {
       case TokenType.SHARE_OUT:
         node = this.parseExport();
         break;
+      case TokenType.SIAN:
+      case TokenType.LEPAK:
+        node = this.parseSleep();
+        break;
+      case TokenType.CHOPE:
+        node = this.parseChope();
+        break;
+      case TokenType.DIE_DIE_MUST:
+        node = this.parseAssert();
+        break;
+      case TokenType.ACT_BLUR:
+        node = this.parseActBlur();
+        break;
+      case TokenType.HANTAM_LAH:
+        node = this.parseDoWhile();
+        break;
+      case TokenType.SABO:
+        node = this.parseSabo();
+        break;
+      case TokenType.SWEE:
+        node = this.parseSwee();
+        break;
+      case TokenType.JIO:
+        node = this.parseJio();
+        break;
       default:
         throw new TokKokError(`Unexpected token: ${token.type}`, token.line);
     }
@@ -391,7 +498,7 @@ export class Parser {
           ? "+="
           : "-=";
     const target = this.parsePrimary();
-    if (target.type !== "Identifier" && target.type !== "MemberExpr") {
+    if (target.type !== "Identifier" && target.type !== "MemberExpr" && target.type !== "IndexExpr") {
       throw new TokKokError(
         `Invalid assignment target: ${target.type}`,
         opToken.line,
@@ -602,6 +709,71 @@ export class Parser {
     return { type: "Export", name };
   }
 
+  private parseSleep(): SleepNode {
+    this.next(); // consume SIAN or LEPAK
+    const duration = this.parseExpression();
+    this.consumeTerminator();
+    return { type: "Sleep", duration };
+  }
+
+  private parseChope(): ChopeNode {
+    this.expect(TokenType.CHOPE);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.consumeTerminator();
+    return { type: "Chope", name };
+  }
+
+  private parseActBlur(): ActBlurNode {
+    this.expect(TokenType.ACT_BLUR);
+    this.expect(TokenType.LBRACE);
+    const body = this.parseBlock();
+    return { type: "ActBlur", body };
+  }
+
+  private parseDoWhile(): DoWhileNode {
+    this.expect(TokenType.HANTAM_LAH);
+    this.expect(TokenType.LBRACE);
+    const body = this.parseBlock();
+    this.expect(TokenType.UNTIL);
+    this.expect(TokenType.LPAREN);
+    const test = this.parseExpression();
+    this.expect(TokenType.RPAREN);
+    this.consumeTerminator();
+    return { type: "DoWhile", body, test };
+  }
+
+  private parseSabo(): SaboNode {
+    this.expect(TokenType.SABO);
+    const target = this.parsePrimary();
+    this.consumeTerminator();
+    return { type: "Sabo", target };
+  }
+
+  private parseSwee(): SweeNode {
+    this.expect(TokenType.SWEE);
+    const value = this.parseExpression();
+    this.consumeTerminator();
+    return { type: "Swee", value };
+  }
+
+  private parseJio(): CallStatementNode {
+    this.expect(TokenType.JIO);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.expect(TokenType.LPAREN);
+    const args = this.parseArgs();
+    this.expect(TokenType.RPAREN);
+    this.consumeTerminator();
+    return { type: "CallStatement", name, args };
+  }
+
+  parseREPL(): ASTNode[] {
+    const body: ASTNode[] = [];
+    while (!this.match(TokenType.EOF)) {
+      body.push(this.parseStatement());
+    }
+    return body;
+  }
+
   private parseBlock(): ASTNode[] {
     const body: ASTNode[] = [];
     while (!this.match(TokenType.RBRACE) && !this.match(TokenType.EOF)) {
@@ -695,6 +867,31 @@ export class Parser {
       const op = this.expect(TokenType.MINUS).value;
       const expr = this.parseUnary();
       return { type: "UnaryExpr", op, expr };
+    }
+    if (this.match(TokenType.KAYPOH)) {
+      this.next();
+      const expr = this.parseUnary();
+      return { type: "KaypohExpr", expr };
+    }
+    if (this.match(TokenType.GOSTAN)) {
+      this.next();
+      const expr = this.parseUnary();
+      return { type: "GostanExpr", expr };
+    }
+    if (this.match(TokenType.AGAK_AGAK)) {
+      this.next();
+      const expr = this.parseUnary();
+      return { type: "AgakAgakExpr", expr };
+    }
+    if (this.match(TokenType.MAKAN)) {
+      this.next();
+      const expr = this.parseUnary();
+      return { type: "MakanExpr", expr };
+    }
+    if (this.match(TokenType.TABAO)) {
+      this.next();
+      const expr = this.parseUnary();
+      return { type: "TabaoExpr", expr };
     }
     return this.parsePrimary();
   }
@@ -793,11 +990,30 @@ export class Parser {
         );
     }
 
-    // Member access (dot)
-    while (this.match(TokenType.DOT)) {
-      this.next();
-      const property = this.expect(TokenType.IDENTIFIER).value;
-      node = { type: "MemberExpr", object: node, property };
+    // Member access (dot), method calls, and bracket indexing
+    while (
+      this.match(TokenType.DOT) ||
+      this.match(TokenType.LBRACKET)
+    ) {
+      if (this.match(TokenType.DOT)) {
+        this.next();
+        const property = this.expect(TokenType.IDENTIFIER).value;
+        // Check if it's a method call: obj.method(args)
+        if (this.match(TokenType.LPAREN)) {
+          this.next();
+          const args = this.parseArgs();
+          this.expect(TokenType.RPAREN);
+          node = { type: "MethodCallExpr", object: node, method: property, args };
+        } else {
+          node = { type: "MemberExpr", object: node, property };
+        }
+      } else {
+        // Bracket indexing: obj[expr]
+        this.next(); // consume [
+        const index = this.parseExpression();
+        this.expect(TokenType.RBRACKET);
+        node = { type: "IndexExpr", object: node, index };
+      }
     }
 
     return node;

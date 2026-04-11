@@ -1,0 +1,42 @@
+eh listen lah
+
+  // shiok: do-while loop (hantam lah ... until)
+  oi "=== HANTAM LAH (DO-WHILE) ==="
+  eh got count = 0
+  hantam lah {
+    oi count
+    eh change count = count + 1
+  } until (count less than 5)
+
+  // shiok: executes at least once even if condition is false
+  oi "=== HANTAM AT LEAST ONCE ==="
+  eh got x = 100
+  hantam lah {
+    oi "This runs at least once! x =" + to_words(x)
+    eh change x = x + 1
+  } until (x less than 5)
+
+  // shiok: sabo (delete)
+  oi "=== SABO (DELETE) ==="
+
+  // shiok: Delete object property
+  eh got person = { name: "Ah Beng", age: 25, secret: "likes BTS" }
+  oi person
+  sabo person.secret
+  oi person
+
+  // shiok: Delete array element
+  eh got items = ["apple", "banana", "cherry"]
+  oi items
+  sabo items[1]
+  oi items
+
+  // shiok: jio (casual function call)
+  oi "=== JIO (CASUAL CALL) ==="
+  steady lah do this greet(name) {
+    oi "Eh " + name + ", come eat lah!"
+  }
+  jio greet("Ah Lian")
+  jio greet("Ah Beng")
+
+ok lah bye

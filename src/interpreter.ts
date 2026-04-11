@@ -11,6 +11,8 @@ import type {
   ImportNode,
   ArrayLiteralNode,
   CallExprNode,
+  IndexExprNode,
+  MethodCallExprNode,
   ASTNode,
 } from "./parser";
 import {
@@ -67,11 +69,56 @@ class Environment {
     if (this.parent) return this.parent.has(name);
     return false;
   }
+
+  delete(name: string): boolean {
+    if (this.values.has(name)) {
+      this.values.delete(name);
+      return true;
+    }
+    if (this.parent) return this.parent.delete(name);
+    return false;
+  }
+
+  freeze(name: string): void {
+    if (this.values.has(name)) {
+      const val = this.values.get(name);
+      if (typeof val === "object" && val !== null) {
+        Object.freeze(val);
+      }
+    } else if (this.parent) {
+      this.parent.freeze(name);
+    }
+  }
 }
 
 export class Interpreter {
   private globalEnv: Environment = new Environment();
   private env: Environment = this.globalEnv;
+
+  constructor() {
+    // Math built-ins
+    this.globalEnv.set("round", (x: number) => Math.round(x));
+    this.globalEnv.set("floor", (x: number) => Math.floor(x));
+    this.globalEnv.set("ceil", (x: number) => Math.ceil(x));
+    this.globalEnv.set("abs", (x: number) => Math.abs(x));
+    this.globalEnv.set("pow", (x: number, y: number) => Math.pow(x, y));
+    this.globalEnv.set("sqrt", (x: number) => Math.sqrt(x));
+    this.globalEnv.set("random", () => Math.random());
+    this.globalEnv.set("min", (...args: number[]) => Math.min(...args));
+    this.globalEnv.set("max", (...args: number[]) => Math.max(...args));
+
+    // Type conversion built-ins
+    this.globalEnv.set("to_nombor", (x: any) => Number(x));
+    this.globalEnv.set("to_words", (x: any) => String(x));
+    this.globalEnv.set("to_can_cannot", (x: any) => Boolean(x));
+
+    // Utility built-ins
+    this.globalEnv.set("panjang", (x: any) => {
+      if (typeof x === "string" || Array.isArray(x)) return x.length;
+      if (typeof x === "object" && x !== null) return Object.keys(x).length;
+      throw new SiaoError("panjang only works on strings, arrays, and objects lah!");
+    });
+  }
 
   run(program: ProgramNode): void {
     try {
@@ -96,6 +143,12 @@ export class Interpreter {
         // Re-throw other errors so they can be handled by index.ts
         throw err;
       }
+    }
+  }
+
+  runStatements(stmts: ASTNode[]): void {
+    for (const node of stmts) {
+      this.evaluate(node);
     }
   }
 
@@ -142,6 +195,19 @@ export class Interpreter {
             (obj as any)[n.target.property] += val as any;
           } else if (n.op === "-=") {
             (obj as any)[n.target.property] -= val as any;
+          }
+        } else if (n.target.type === "IndexExpr") {
+          const obj = this.evaluate(n.target.object);
+          const idx = this.evaluate(n.target.index);
+          if (obj === null || obj === undefined) {
+            throw new BoJioError(`Cannot index into ${obj}`);
+          }
+          if (n.op === "=") {
+            (obj as any)[idx as any] = val;
+          } else if (n.op === "+=") {
+            (obj as any)[idx as any] += val as any;
+          } else if (n.op === "-=") {
+            (obj as any)[idx as any] -= val as any;
           }
         }
         return;
@@ -498,6 +564,163 @@ export class Interpreter {
           );
         }
         return (obj as any)[node.property];
+      }
+      case "IndexExpr": {
+        const n = node as IndexExprNode;
+        const obj = this.evaluate(n.object);
+        const idx = this.evaluate(n.index);
+        if (obj === null || obj === undefined) {
+          throw new BoJioError(`Cannot index into ${obj}`);
+        }
+        return (obj as any)[idx as any];
+      }
+      case "MethodCallExpr": {
+        const n = node as MethodCallExprNode;
+        const obj = this.evaluate(n.object);
+        const args = n.args.map((a: ASTNode) => this.evaluate(a));
+        if (obj === null || obj === undefined) {
+          throw new BoJioError(`Cannot call method '${n.method}' on ${obj}`);
+        }
+        // Singlish string method aliases
+        if (typeof obj === "string") {
+          switch (n.method) {
+            case "upper": return obj.toUpperCase();
+            case "lower": return obj.toLowerCase();
+            case "trim": return obj.trim();
+            case "split": return obj.split(args[0] as string);
+            case "includes": return obj.includes(args[0] as string);
+            case "slice": return obj.slice(args[0] as number, args[1] as number);
+            case "indexOf": return obj.indexOf(args[0] as string);
+            case "replace": return obj.replace(args[0] as string, args[1] as string);
+            case "startsWith": return obj.startsWith(args[0] as string);
+            case "endsWith": return obj.endsWith(args[0] as string);
+            case "repeat": return obj.repeat(args[0] as number);
+            case "charAt": return obj.charAt(args[0] as number);
+          }
+        }
+        // Array method handling
+        if (Array.isArray(obj)) {
+          switch (n.method) {
+            case "push": return obj.push(...args);
+            case "pop": return obj.pop();
+            case "shift": return obj.shift();
+            case "reverse": obj.reverse(); return obj;
+            case "join": return obj.join(args[0] as string ?? ",");
+            case "includes": return obj.includes(args[0]);
+            case "slice": return obj.slice(args[0] as number, args[1] as number);
+            case "indexOf": return obj.indexOf(args[0]);
+            case "sort": return obj.sort();
+            case "find": return obj.find(args[0] as any);
+            case "map": return obj.map(args[0] as any);
+            case "filter": return obj.filter(args[0] as any);
+            case "concat": return obj.concat(...args);
+            case "flat": return obj.flat(args[0] as number ?? 1);
+            case "every": return obj.every(args[0] as any);
+            case "some": return obj.some(args[0] as any);
+            case "reduce": return obj.reduce(args[0] as any, args[1]);
+            case "forEach": obj.forEach(args[0] as any); return;
+          }
+        }
+        // Object method handling
+        if (typeof obj === "object") {
+          switch (n.method) {
+            case "keys": return Object.keys(obj as object);
+            case "values": return Object.values(obj as object);
+            case "entries": return Object.entries(obj as object);
+            case "hasOwnProperty": return Object.prototype.hasOwnProperty.call(obj, args[0] as PropertyKey);
+          }
+        }
+        // Fallback to native method
+        const method = (obj as any)[n.method];
+        if (typeof method === "function") {
+          return method.apply(obj, args);
+        }
+        throw new SiaoError(`'${n.method}' is not a method lah!`);
+      }
+      case "Sleep": {
+        const ms = Number(this.evaluate(node.duration));
+        const end = Date.now() + ms;
+        while (Date.now() < end) { /* busy wait */ }
+        return;
+      }
+      case "Chope": {
+        this.env.freeze(node.name);
+        return;
+      }
+      case "ActBlur": {
+        try {
+          this.evalBlock(node.body, true);
+        } catch {
+          // Silently ignore — act blur mah
+        }
+        return;
+      }
+      case "DoWhile": {
+        do {
+          try {
+            this.evalBlock(node.body, true);
+          } catch (sig) {
+            if (sig instanceof BreakSignal) break;
+            if (sig instanceof ContinueSignal) continue;
+            throw sig;
+          }
+        } while (this.evaluate(node.test));
+        return;
+      }
+      case "Sabo": {
+        if (node.target.type === "Identifier") {
+          this.env.delete(node.target.name);
+        } else if (node.target.type === "MemberExpr") {
+          const obj = this.evaluate(node.target.object);
+          if (obj !== null && obj !== undefined) {
+            delete (obj as any)[node.target.property];
+          }
+        } else if (node.target.type === "IndexExpr") {
+          const obj = this.evaluate(node.target.object);
+          const idx = this.evaluate(node.target.index);
+          if (Array.isArray(obj)) {
+            obj.splice(idx as number, 1);
+          } else if (obj !== null && obj !== undefined) {
+            delete (obj as any)[idx as any];
+          }
+        }
+        return;
+      }
+      case "Swee": {
+        const val = this.evaluate(node.value);
+        console.log(JSON.stringify(val, null, 2));
+        return;
+      }
+      case "KaypohExpr": {
+        const val = this.evaluate(node.expr);
+        if (val === null) return "bo jio";
+        if (val === undefined) return "blur blur";
+        if (Array.isArray(val)) return "whole list";
+        if (typeof val === "string") return "words";
+        if (typeof val === "number") return "nombor";
+        if (typeof val === "boolean") return "can cannot";
+        if (typeof val === "function") return "steady";
+        if (typeof val === "object") return "all the things";
+        return "siao";
+      }
+      case "GostanExpr": {
+        const val = this.evaluate(node.expr);
+        if (typeof val === "string") return val.split("").reverse().join("");
+        if (Array.isArray(val)) return [...val].reverse();
+        throw new SiaoError("Gostan only works on strings and arrays lah!");
+      }
+      case "AgakAgakExpr": {
+        const val = this.evaluate(node.expr);
+        return Math.round(val as number);
+      }
+      case "MakanExpr": {
+        const val = this.evaluate(node.expr);
+        if (Array.isArray(val)) return val.pop();
+        throw new SiaoError("Makan only works on arrays lah!");
+      }
+      case "TabaoExpr": {
+        const val = this.evaluate(node.expr);
+        return JSON.parse(JSON.stringify(val));
       }
       case "Import": {
         const n = node as ImportNode;

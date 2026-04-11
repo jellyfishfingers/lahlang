@@ -1,0 +1,105 @@
+eh listen lah
+
+  // shiok: Built-in methods on strings, arrays, and objects
+
+  // shiok: String methods ---
+  oi "=== STRING METHODS ==="
+  eh got msg = "hello world"
+  oi msg.upper()
+  oi msg.lower()
+  oi msg.includes("world")
+  oi msg.replace("world", "Singapore")
+  oi msg.split(" ")
+  oi msg.slice(0, 5)
+  oi msg.indexOf("world")
+  oi msg.trim()
+  oi msg.startsWith("hello")
+  oi msg.endsWith("world")
+  oi msg.charAt(0)
+  oi msg.repeat(2)
+
+  // shiok: Array methods ---
+  oi "=== ARRAY METHODS ==="
+  eh got nums = [3, 1, 4, 1, 5, 9]
+
+  eh got r = nums.push(2)
+  oi nums
+
+  eh got popped = nums.pop()
+  oi popped
+
+  oi nums.includes(4)
+  oi nums.indexOf(1)
+  oi nums.join(" - ")
+  oi nums.slice(1, 3)
+
+  // shiok: Array with callbacks ---
+  oi "=== ARRAY CALLBACKS ==="
+  eh got prices = [2, 5, 3, 8, 1]
+
+  eh got doubled = prices.map(one time only (x) {
+    here take x * 2
+  })
+  oi doubled
+
+  eh got expensive = prices.filter(one time only (x) {
+    here take x more than 3
+  })
+  oi expensive
+
+  eh got total = prices.reduce(one time only (acc, x) {
+    here take acc + x
+  }, 0)
+  oi total
+
+  oi prices.some(one time only (x) { here take x more than 5 })
+  oi prices.every(one time only (x) { here take x more than 0 })
+
+  // shiok: Object methods ---
+  oi "=== OBJECT METHODS ==="
+  eh got hawker = { stall: "Ah Huat", dish: "Laksa", price: 5 }
+  oi hawker.keys()
+  oi hawker.values()
+  oi hawker.entries()
+
+  // shiok: Bracket indexing ---
+  oi "=== BRACKET INDEXING ==="
+  eh got arr = [10, 20, 30, 40, 50]
+  oi arr[0]
+  oi arr[2]
+  oi arr[4]
+  eh change arr[1] = 99
+  oi arr
+
+  // shiok: String escape sequences ---
+  oi "=== ESCAPE SEQUENCES ==="
+  oi "Line 1\nLine 2"
+  oi "Tab\there"
+  oi "Quote: \"hello\""
+  oi "Backslash: \\"
+
+  // shiok: Math built-ins ---
+  oi "=== MATH BUILT-INS ==="
+  oi round(3.7)
+  oi floor(3.7)
+  oi ceil(3.2)
+  oi abs(-42)
+  oi pow(2, 10)
+  oi sqrt(144)
+  oi min(3, 1, 4, 1, 5)
+  oi max(3, 1, 4, 1, 5)
+
+  // shiok: Type conversion ---
+  oi "=== TYPE CONVERSION ==="
+  oi to_nombor("42") + 8
+  oi to_words(123)
+  oi to_can_cannot(1)
+  oi to_can_cannot(0)
+
+  // shiok: panjang (length) ---
+  oi "=== PANJANG (LENGTH) ==="
+  oi panjang("hello")
+  oi panjang([1, 2, 3])
+  oi panjang({ a: 1, b: 2 })
+
+ok lah bye

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import * as fs from "fs";
 import * as path from "path";
+import * as readline from "readline";
 import { Lexer } from "./lexer";
 import { Parser } from "./parser";
 import { Interpreter } from "./interpreter";
@@ -65,7 +66,78 @@ const args = process.argv.slice(2);
 
 if (args.length === 0) {
   printBanner();
-  process.exit(0);
+  startREPL();
+}
+
+function startREPL() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: `${colors.cyan}lah>${colors.reset} `,
+  });
+
+  const interpreter = new Interpreter();
+  let buffer = "";
+  let braceDepth = 0;
+
+  console.log(
+    `${colors.dim}Type Singlish code (no need eh listen lah / ok lah bye).${colors.reset}`,
+  );
+  console.log(
+    `${colors.dim}Press Ctrl+C to exit.${colors.reset}\n`,
+  );
+
+  rl.prompt();
+
+  rl.on("line", (line: string) => {
+    buffer += (buffer ? "\n" : "") + line;
+
+    for (const ch of line) {
+      if (ch === "{") braceDepth++;
+      if (ch === "}") braceDepth--;
+    }
+
+    if (braceDepth > 0) {
+      process.stdout.write(`${colors.dim}...${colors.reset} `);
+      return;
+    }
+
+    braceDepth = 0;
+
+    if (buffer.trim() === "") {
+      buffer = "";
+      rl.prompt();
+      return;
+    }
+
+    try {
+      const lexer = new Lexer(buffer);
+      const tokens = lexer.tokenize();
+      const parser = new Parser(tokens);
+      const stmts = parser.parseREPL();
+      interpreter.runStatements(stmts);
+    } catch (err: any) {
+      if (err.name === "TokKokError") {
+        console.error(`${colors.red}[TOK KOK] ${err.message}${colors.reset}`);
+      } else if (err.name === "GoneCase") {
+        console.error(`${colors.red}[FATAL] ${err.message}${colors.reset}`);
+      } else {
+        console.error(
+          `${colors.red}[ERROR] ${err.name || "Error"}: ${err.message || err}${colors.reset}`,
+        );
+      }
+    }
+
+    buffer = "";
+    rl.prompt();
+  });
+
+  rl.on("close", () => {
+    console.log(`\n${colors.green}Ok lah bye! 👋${colors.reset}`);
+    process.exit(0);
+  });
+
+  return;
 }
 
 const filePath = path.resolve(args[0]);
