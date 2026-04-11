@@ -6,20 +6,21 @@ import { Parser } from "./parser";
 import { Interpreter } from "./interpreter";
 
 // ANSI color codes
+const useColors = Boolean(process.stdout.isTTY);
 const colors = {
-  reset: "\x1b[0m",
-  bright: "\x1b[1m",
-  dim: "\x1b[2m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-  white: "\x1b[37m",
-  bgGreen: "\x1b[42m",
-  bgBlue: "\x1b[44m",
-  bgRed: "\x1b[41m",
+  reset: useColors ? "\x1b[0m" : "",
+  bright: useColors ? "\x1b[1m" : "",
+  dim: useColors ? "\x1b[2m" : "",
+  red: useColors ? "\x1b[31m" : "",
+  green: useColors ? "\x1b[32m" : "",
+  yellow: useColors ? "\x1b[33m" : "",
+  blue: useColors ? "\x1b[34m" : "",
+  magenta: useColors ? "\x1b[35m" : "",
+  cyan: useColors ? "\x1b[36m" : "",
+  white: useColors ? "\x1b[37m" : "",
+  bgGreen: useColors ? "\x1b[42m" : "",
+  bgBlue: useColors ? "\x1b[44m" : "",
+  bgRed: useColors ? "\x1b[41m" : "",
 };
 
 function printBanner() {
