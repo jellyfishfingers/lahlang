@@ -22,7 +22,22 @@ const colors = {
   bgRed: "\x1b[41m",
 };
 
+function getCliVersion(): string {
+  try {
+    const packageJsonPath = path.resolve(__dirname, "..", "package.json");
+    const packageJson = JSON.parse(
+      fs.readFileSync(packageJsonPath, "utf-8"),
+    ) as {
+      version?: string;
+    };
+    return packageJson.version ?? "0.0.0";
+  } catch {
+    return "0.0.0";
+  }
+}
+
 function printBanner() {
+  const version = getCliVersion();
   const banner = `
 ${colors.cyan}${colors.bright}
     ██╗      █████╗ ██╗  ██╗██╗      █████╗ ███╗   ██╗ ██████╗ 
@@ -32,7 +47,7 @@ ${colors.cyan}${colors.bright}
     ███████╗██║  ██║██║  ██║███████╗██║  ██║██║ ╚████║╚██████╔╝
     ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
 ${colors.reset}
-${colors.green}${colors.bright}    v0.2.0 — Can one lah! 🇸🇬${colors.reset}
+${colors.green}${colors.bright}    v${version} — Can one lah! 🇸🇬${colors.reset}
 
 ${colors.yellow}Usage:${colors.reset}
   ${colors.cyan}lahlang${colors.reset} ${colors.white}<file.lah>${colors.reset}
