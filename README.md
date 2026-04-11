@@ -7,7 +7,7 @@
 		<img src="https://img.shields.io/badge/Follow%20on%20X-000000?style=for-the-badge&logo=x&logoColor=white" alt="Follow on X" style="height: 30px; border-radius: 4px;" />
 	</a>
 	<a href="https://buymeacoffee.com/suryanshkushwaha">
-		<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 30px; />
+		<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 30px;" />
 	</a>
 </p>
 
