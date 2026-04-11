@@ -39,10 +39,10 @@ yarn global add lahlang
 Once installed, you can check if it's working by running:
 
 ```bash
-lahlang --version
+lahlang
 ```
 
-If you see a version number (e.g., `0.1.0`), you're ready to go!
+If you see the Lahlang banner and usage help, you're ready to go.
 
 ---
 

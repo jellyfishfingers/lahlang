@@ -46,7 +46,8 @@ You can also manage imports and exports within your files.
 ```lah
 chiong bring in "math_utils.lah";
 
-share out eh got my_const = 100;
+eh got my_const = 100;
+share out my_const;
 
 old liao steady lah do this legacyFunc() { ... }
 ```

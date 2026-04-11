@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Lexer } from '../src/lexer';
 import { Parser } from '../src/parser';
-import { TokenType } from '../src/tokens';
 
 describe('Parser', () => {
   it('should parse a basic program', () => {
@@ -42,7 +41,7 @@ describe('Parser', () => {
         oi "one";
       } or maybe (a same same 2) {
         oi "two";
-      } if not then {
+      } abuden {
         oi "other";
       }
     ok lah bye`;

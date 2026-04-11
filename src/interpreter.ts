@@ -2,42 +2,16 @@ import * as fs from "fs";
 import { TokenType } from "./tokens";
 import type {
   ProgramNode,
-  VarDeclarationNode,
   ConstDeclarationNode,
   ReassignNode,
-  PrintNode,
   PrintVerboseNode,
-  IfNode,
-  ElseIfNode,
-  WhileNode,
   ForNode,
-  ForEachNode,
-  BreakNode,
-  ContinueNode,
-  FunctionDeclarationNode,
-  ReturnNode,
   CallStatementNode,
-  TryCatchNode,
   ThrowNode,
-  WarnNode,
-  AssertNode,
   ImportNode,
-  ExportNode,
-  StringLiteralNode,
-  NumberLiteralNode,
-  BooleanLiteralNode,
-  NullLiteralNode,
-  UndefinedLiteralNode,
-  IdentifierNode,
-  BinaryExprNode,
-  UnaryExprNode,
   ArrayLiteralNode,
-  ObjectLiteralNode,
   CallExprNode,
   ASTNode,
-  CheckNode,
-  InputNode,
-  MemberExprNode,
 } from "./parser";
 import {
   JialatError,
@@ -51,7 +25,6 @@ import {
   CbError,
   LanJiaoError,
   CcbError,
-  ChaoCbError,
 } from "./errors";
 
 // --- Internal Signals ---
@@ -106,10 +79,16 @@ export class Interpreter {
         this.evaluate(node);
       }
     } catch (err) {
-      if (err instanceof GoneCase || err instanceof ChaoCbError) {
-        console.error(`GONE CASE LAH! Program die already: ${err instanceof Error ? err.message : err}`);
+      if (err instanceof GoneCase) {
+        console.error(
+          `GONE CASE LAH! Program die already: ${err instanceof Error ? err.message : err}`,
+        );
         process.exit(1);
-      } else if (err instanceof ReturnSignal || err instanceof BreakSignal || err instanceof ContinueSignal) {
+      } else if (
+        err instanceof ReturnSignal ||
+        err instanceof BreakSignal ||
+        err instanceof ContinueSignal
+      ) {
         // These shouldn't bubble up to the top level
         console.error("[ERROR] Unexpected signal at top level lah!");
         process.exit(1);
@@ -122,7 +101,9 @@ export class Interpreter {
 
   private evaluate(node: ASTNode): unknown {
     if ((node as any).isDeprecated) {
-      console.warn("[OLD LIAO] This part of the code is deprecated already lah!");
+      console.warn(
+        "[OLD LIAO] This part of the code is deprecated already lah!",
+      );
     }
     switch (node.type) {
       case "VarDeclaration": {
@@ -151,14 +132,16 @@ export class Interpreter {
         } else if (n.target.type === "MemberExpr") {
           const obj = this.evaluate(n.target.object);
           if (obj === null || obj === undefined) {
-            throw new BoJioError(`Cannot assign to property '${n.target.property}' of ${obj}`);
+            throw new BoJioError(
+              `Cannot assign to property '${n.target.property}' of ${obj}`,
+            );
           }
           if (n.op === "=") {
             (obj as any)[n.target.property] = val;
           } else if (n.op === "+=") {
-            (obj as any)[n.target.property] += (val as any);
+            (obj as any)[n.target.property] += val as any;
           } else if (n.op === "-=") {
-            (obj as any)[n.target.property] -= (val as any);
+            (obj as any)[n.target.property] -= val as any;
           }
         }
         return;
@@ -187,29 +170,46 @@ export class Interpreter {
         return undefined;
       case "ErrorLiteral": {
         switch (node.variant) {
-          case TokenType.JIALAT_ERROR: return JialatError;
-          case TokenType.BO_JIO_ERROR: return BoJioError;
-          case TokenType.SIAO_ERROR: return SiaoError;
-          case TokenType.TOK_KOK_ERROR: return TokKokError;
-          case TokenType.TAN_KU_KU_ERROR: return TanKuKuError;
-          case TokenType.SUAY_ERROR: return SuayError;
-          case TokenType.WAH_LAU_ERROR: return WahLauError;
-          case TokenType.GONE_CASE: return GoneCase;
-          case TokenType.CB_ERROR: return CbError;
-          case TokenType.LAN_JIAO_ERROR: return LanJiaoError;
-          case TokenType.CCB_ERROR: return CcbError;
-          case TokenType.CHAO_CB_ERROR: return ChaoCbError;
-          default: return Error;
+          case TokenType.JIALAT_ERROR:
+            return JialatError;
+          case TokenType.BO_JIO_ERROR:
+            return BoJioError;
+          case TokenType.SIAO_ERROR:
+            return SiaoError;
+          case TokenType.TOK_KOK_ERROR:
+            return TokKokError;
+          case TokenType.TAN_KU_KU_ERROR:
+            return TanKuKuError;
+          case TokenType.SUAY_ERROR:
+            return SuayError;
+          case TokenType.WAH_LAU_ERROR:
+            return WahLauError;
+          case TokenType.GONE_CASE:
+            return GoneCase;
+          case TokenType.CB_ERROR:
+            return CbError;
+          case TokenType.LAN_JIAO_ERROR:
+            return LanJiaoError;
+          case TokenType.CCB_ERROR:
+            return CcbError;
+          default:
+            return Error;
         }
       }
       case "TypeLiteral": {
         switch (node.variant) {
-          case TokenType.WORDS: return "WORDS";
-          case TokenType.NOMBOR: return "NOMBOR";
-          case TokenType.CAN_CANNOT: return "CAN_CANNOT";
-          case TokenType.WHOLE_LIST: return "WHOLE_LIST";
-          case TokenType.ALL_THE_THINGS: return "ALL_THE_THINGS";
-          default: return "UNKNOWN_TYPE";
+          case TokenType.WORDS:
+            return "WORDS";
+          case TokenType.NOMBOR:
+            return "NOMBOR";
+          case TokenType.CAN_CANNOT:
+            return "CAN_CANNOT";
+          case TokenType.WHOLE_LIST:
+            return "WHOLE_LIST";
+          case TokenType.ALL_THE_THINGS:
+            return "ALL_THE_THINGS";
+          default:
+            return "UNKNOWN_TYPE";
         }
       }
       case "Identifier": {
@@ -220,8 +220,12 @@ export class Interpreter {
         const right = this.evaluate(node.right);
         switch (node.op) {
           case "+":
-            const toString = (v: any) => (v instanceof Error ? v.message : String(v));
-            return typeof left === "string" || typeof right === "string" || left instanceof Error || right instanceof Error
+            const toString = (v: any) =>
+              v instanceof Error ? v.message : String(v);
+            return typeof left === "string" ||
+              typeof right === "string" ||
+              left instanceof Error ||
+              right instanceof Error
               ? toString(left) + toString(right)
               : (left as any) + (right as any);
           case "-":
@@ -298,9 +302,7 @@ export class Interpreter {
         const fn = this.env.get(n.name);
         if (typeof fn !== "function")
           throw new SiaoError(`'${n.name}' is not a function`);
-        return (fn as any)(
-          ...n.args.map((arg: any) => this.evaluate(arg)),
-        );
+        return (fn as any)(...n.args.map((arg: any) => this.evaluate(arg)));
       }
       case "Switch": {
         const val = this.evaluate(node.discriminant);
@@ -451,7 +453,11 @@ export class Interpreter {
         if (n.variant === TokenType.CCB_THROW) throw new CcbError(msg);
         if (n.variant === TokenType.CB_LAH) throw new CbError(msg);
         if (n.variant === TokenType.BABI_INPUT) throw new LanJiaoError(msg);
-        if (n.variant === TokenType.KNN_CRASH || n.variant === TokenType.PUKI_PANIC) throw new GoneCase(msg);
+        if (
+          n.variant === TokenType.KNN_CRASH ||
+          n.variant === TokenType.PUKI_PANIC
+        )
+          throw new GoneCase(msg);
         throw new Error(msg);
       }
       case "Warn": {
@@ -462,8 +468,11 @@ export class Interpreter {
         const val = this.evaluate(node.value);
         if (!val) {
           const msg = `Assert failed: ${JSON.stringify(val)}`;
-          if (node.variant === TokenType.CHAO_CB_ASSERT || node.variant === TokenType.HONG_GAN_LAH) {
-             throw new GoneCase(`SI BEH JIALAT! ${msg}`);
+          if (
+            node.variant === TokenType.CHAO_CB_ASSERT ||
+            node.variant === TokenType.HONG_GAN_LAH
+          ) {
+            throw new GoneCase(`SI BEH JIALAT! ${msg}`);
           }
           throw new GoneCase(msg);
         }
@@ -484,7 +493,9 @@ export class Interpreter {
       case "MemberExpr": {
         const obj = this.evaluate(node.object);
         if (obj === null || obj === undefined) {
-          throw new BoJioError(`Cannot access property '${node.property}' of ${obj}`);
+          throw new BoJioError(
+            `Cannot access property '${node.property}' of ${obj}`,
+          );
         }
         return (obj as any)[node.property];
       }

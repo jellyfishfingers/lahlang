@@ -4,6 +4,9 @@
   "description": "Syntax highlighting for the lahlang programming language",
   "version": "0.1.2",
   "publisher": "suryanshkushwaha",
+  "sponsor": {
+    "url": "https://github.com/sponsors/suryanshkushwaha"
+  },
   "icon": "icon.png",
   "repository": {
     "type": "git",

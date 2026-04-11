@@ -16,7 +16,7 @@ steady lah do this sayHello(name) {
 
 ## Calling a Function
 
-Use `eh do this` followed by the function name.
+Use `eh do this` followed by the function name when calling as a standalone statement.
 
 ```lah
 eh do this sayHello("Suryansh");
@@ -33,9 +33,11 @@ steady lah do this addNumbers(a, b) {
   here take a + b;
 }
 
-eh got result = eh do this addNumbers(5, 10);
+eh got result = addNumbers(5, 10);
 oi result;
 ```
+
+When a call is part of an expression (like assignment), call directly without `eh do this`.
 
 ---
 

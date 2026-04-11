@@ -52,7 +52,7 @@
       "patterns": [
         {
           "name": "keyword.control.lah",
-          "match": "\\b(confirm or not|if not then|which one lah|or maybe|if it's|last resort|keep going lah|one by one lah|every one also|siao liao stop|knn stop|skip lah|here take|see how lah|aiyoh kena|confirm do|jialat throw|paiseh warn|hong gan lah|chao cb assert|kan ni na crash|ccb throw|puki panic|babi input|cb lah)\\b"
+          "match": "\\b(confirm or not|abuden|which one lah|or maybe|if it's|last resort|keep going lah|one by one lah|every one also|siao liao stop|knn stop|skip lah|here take|see how lah|aiyoh kena|confirm do|jialat throw|paiseh warn|hong gan lah|chao cb assert|kan ni na crash|ccb throw|puki panic|babi input|cb lah)\\b"
         },
         {
           "name": "keyword.control.module.lah",
@@ -96,7 +96,7 @@
       "patterns": [
         {
           "name": "support.type.exception.lah",
-          "match": "\\b(TanKuKuError|ChaoCbError|LanJiaoError|TokKokError|WahLauError|JialatError|BoJioError|SuayError|SiaoError|CcbError|CbError|GoneCase)\\b"
+          "match": "\\b(TanKuKuError|LanJiaoError|TokKokError|WahLauError|JialatError|BoJioError|SuayError|SiaoError|CcbError|CbError|GoneCase)\\b"
         }
       ]
     },

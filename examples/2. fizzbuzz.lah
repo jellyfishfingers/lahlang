@@ -8,7 +8,7 @@ eh listen lah
       oi "Fizz";
     } or maybe (i % 5 same same 0) {
       oi "Buzz";
-    } if not then {
+    } abuden {
       oi i;
     }
   }

@@ -80,3 +80,8 @@ This project is licensed under the MIT License. See the [LICENSE](../LICENSE) fi
 ## Support
 
 For issues, feature requests, or questions, please open an issue in the [repository](https://github.com/suryanshkushwaha/lahlang/issues) or contact the maintainers.
+
+If you want to support development:
+
+- GitHub Sponsors: https://github.com/sponsors/suryanshkushwaha
+- Buy Me a Coffee: https://buymeacoffee.com/suryanshkushwaha

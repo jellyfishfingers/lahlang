@@ -1,6 +1,6 @@
 {
   "name": "lahlang",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A programming language for Singaporeans, by not a Singaporean yet. Can one lah!",
   "author": "Suryansh Kushwaha",
   "license": "MIT",
@@ -21,13 +21,23 @@
     "url": "https://github.com/suryanshkushwaha/lahlang/issues"
   },
   "homepage": "https://github.com/suryanshkushwaha/lahlang#readme",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/suryanshkushwaha"
+    },
+    {
+      "type": "buymeacoffee",
+      "url": "https://buymeacoffee.com/suryanshkushwaha"
+    }
+  ],
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node src/index.ts",
-    "start": "node dist/index.js",
+    "dev": "ts-node src/cli.ts",
+    "start": "node dist/cli.js",
     "test": "vitest run",
     "prepublishOnly": "npm run build"
   },

@@ -58,9 +58,7 @@ describe("Full Token Implementation Tests", () => {
     const interpreter = new Interpreter();
     interpreter.run(ast);
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("[OLD LIAO]"),
-    );
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("[OLD LIAO]"));
     warnSpy.mockRestore();
   });
 
@@ -76,10 +74,12 @@ describe("Full Token Implementation Tests", () => {
     ok lah bye`;
     const lexer = new Lexer(source);
     const tokens = lexer.tokenize();
-    
+
     // Ensure comment tokens are produced
-    expect(tokens.some(t => t.type === TokenType.COMMENT)).toBe(true);
-    expect(tokens.some(t => t.type === TokenType.MULTILINE_COMMENT)).toBe(true);
+    expect(tokens.some((t) => t.type === TokenType.COMMENT)).toBe(true);
+    expect(tokens.some((t) => t.type === TokenType.MULTILINE_COMMENT)).toBe(
+      true,
+    );
 
     const parser = new Parser(tokens);
     const ast = parser.parse();
@@ -94,9 +94,17 @@ describe("Full Token Implementation Tests", () => {
 
   it("should handle all error type literals", () => {
     const errorTypes = [
-      "JialatError", "BoJioError", "SiaoError", "TokKokError",
-      "TanKuKuError", "SuayError", "WahLauError", "GoneCase",
-      "CbError", "LanJiaoError", "CcbError", "ChaoCbError"
+      "JialatError",
+      "BoJioError",
+      "SiaoError",
+      "TokKokError",
+      "TanKuKuError",
+      "SuayError",
+      "WahLauError",
+      "GoneCase",
+      "CbError",
+      "LanJiaoError",
+      "CcbError",
     ];
     const source = `eh listen lah
       ${errorTypes.map((t, i) => `eh got e${i} = ${t};`).join("\n")}
@@ -112,7 +120,11 @@ describe("Full Token Implementation Tests", () => {
 
   it("should handle all type literals", () => {
     const types = [
-      "words", "nombor", "can cannot", "whole list", "all the things"
+      "words",
+      "nombor",
+      "can cannot",
+      "whole list",
+      "all the things",
     ];
     const source = `eh listen lah
       ${types.map((t, i) => `eh got t${i} = ${t};`).join("\n")}

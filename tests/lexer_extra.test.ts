@@ -5,7 +5,7 @@ import { TokenType } from '../src/tokens';
 describe('Lexer - Comprehensive', () => {
   it('should tokenize all keywords', () => {
     const source = `eh listen lah eh got confirm got eh change can cannot bo jio blur blur
-      oi oi listen ask lah confirm or not or maybe if not then which one lah if it's last resort
+      oi oi listen ask lah confirm or not or maybe abuden which one lah if it's last resort
       keep going lah one by one lah every one also from to in siao liao stop knn stop skip lah
       steady lah do this here take eh do this one time only see how lah aiyoh kena confirm do
       jialat throw paiseh warn hong gan lah cb lah ccb throw kan ni na crash chao cb assert
