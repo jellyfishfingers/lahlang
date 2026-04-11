@@ -1,3 +1,16 @@
+<p align="center">
+	<img src="./lahlang-extension/icon.png" alt="Lahlang icon" width="140" />
+</p>
+
+<p align="center">
+	<a href="https://x.com/suryanshkush10">
+		<img src="https://img.shields.io/badge/Follow%20on%20X-000000?style=for-the-badge&logo=x&logoColor=white" alt="Follow on X" style="height: 30px; border-radius: 4px;" />
+	</a>
+	<a href="https://buymeacoffee.com/suryanshkushwaha">
+		<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 30px; />
+	</a>
+</p>
+
 # Lahlang 🇸🇬
 
 > A programming language for Singaporeans, by not a Singaporean yet. Can one lah!
@@ -16,6 +29,7 @@
 - [Testing](#testing)
 - [Contributing](#contributing)
 - [Support](#support)
+- [Star History](#star-history)
 - [License](#license)
 
 ---
@@ -177,6 +191,20 @@ Contributions are welcome! Please open issues or pull requests for:
 - Documentation improvements
 - New examples
 
+---
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=suryanshkushwaha%2Flahlang&type=date&legend=top-left">
+ <picture>
+	 <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=suryanshkushwaha/lahlang&type=date&theme=dark&legend=top-left" />
+	 <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=suryanshkushwaha/lahlang&type=date&legend=top-left" />
+	 <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=suryanshkushwaha/lahlang&type=date&legend=top-left" />
+ </picture>
+</a>
+
+---
+
 ## Support
 
 If Lahlang helps you or made you smile, you can support the project here:
@@ -187,9 +215,5 @@ If Lahlang helps you or made you smile, you can support the project here:
 ## License
 
 MIT License
-
----
-
-**For more examples, see the `examples/` folder. For full language reference, see `src/tokens.ts`.**
 
 ---
