@@ -1,3 +1,16 @@
+<p align="center">
+	<img src="./lahlang-extension/icon.png" alt="Lahlang icon" width="140" />
+</p>
+
+<p align="center">
+	<a href="https://x.com/suryanshkush10">
+		<img src="https://img.shields.io/badge/Follow%20on%20X-000000?style=for-the-badge&logo=x&logoColor=white" alt="Follow on X" style="height: 30px; border-radius: 4px;" />
+	</a>
+	<a href="https://buymeacoffee.com/suryanshkushwaha">
+		<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" style="height: 30px;" />
+	</a>
+</p>
+
 # Lahlang 🇸🇬
 
 > A programming language for Singaporeans, by not a Singaporean yet. Can one lah!
@@ -5,7 +18,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
-- [Documentation 📚](#documentation-)
+- [Documentation](#documentation)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -15,6 +28,8 @@
 - [Architecture](#architecture)
 - [Testing](#testing)
 - [Contributing](#contributing)
+- [Support](#support)
+- [Star History](#star-history)
 - [License](#license)
 
 ---
@@ -23,7 +38,7 @@
 
 Lahlang is a fun, expressive programming language inspired by Singlish and Singaporean culture. It’s designed for learning, experimentation, and joy, with syntax and keywords that reflect local slang and humor.
 
-## Documentation 📚
+## Documentation
 
 For a complete guide on how to use Lahlang, check out our extensive documentation:
 
@@ -43,14 +58,14 @@ For a complete guide on how to use Lahlang, check out our extensive documentatio
 - **Singlish Syntax:** Keywords like `eh listen lah`, `ok lah bye`, `oi`, `confirm or not`, `keep going lah`, etc.
 - **VS Code Support:** Get syntax highlighting with the [Lahlang VS Code Extension](https://marketplace.visualstudio.com/items?itemName=suryanshkushwaha.lahlang-vscode).
 - **Variables & Constants:** `eh got`, `confirm got`
-- **Control Flow:** `confirm or not` (if), `or maybe` (else if), `if not then` (else), `keep going lah` (while), `one by one lah` (for), `every one also` (foreach)
+- **Control Flow:** `confirm or not` (if), `or maybe` (else if), `abuden` (else), `keep going lah` (while), `one by one lah` (for), `every one also` (foreach)
 - **Functions:** `steady lah do this`, `here take`, `eh do this`, `one time only`
 - **Error Handling:** `see how lah`, `aiyoh kena`, `confirm do`, `jialat throw`, `paiseh warn`, `hong gan lah`, `chao cb assert`
 - **Types:** `words` (string), `nombor` (number), `can cannot` (boolean), `whole list` (array), `all the things` (object)
 - **Operators:** `same same` (==), `not same` (!=), `and also` (&&), `or can` (||), `add some more` (+=), `minus a bit` (-=)
 - **Comments:** `// shiok:` (single-line), `wahlau start ... wahlau end` (multi-line)
 - **Meta:** `chiong bring in` (import), `share out` (export), `eh check this` (debug/inspect)
-- **Spicy Error Types:** `JialatError`, `BoJioError`, `SiaoError`, `TokKokError`, `TanKuKuError`, `SuayError`, `WahLauError`, `GoneCase`, `CbError`, `LanJiaoError`, `CcbError`, `ChaoCbError`
+- **Spicy Error Types:** `JialatError`, `BoJioError`, `SiaoError`, `TokKokError`, `TanKuKuError`, `SuayError`, `WahLauError`, `GoneCase`, `CbError`, `LanJiaoError`, `CcbError`
 
 ## Installation
 
@@ -89,7 +104,7 @@ eh listen lah
 			oi "Fizz";
 		} or maybe (i % 5 same same 0) {
 			oi "Buzz";
-		} if not then {
+		} abuden {
 			oi i;
 		}
 	}
@@ -176,12 +191,29 @@ Contributions are welcome! Please open issues or pull requests for:
 - Documentation improvements
 - New examples
 
-## License
+---
 
-MIT License
+## Star History
+
+<a href="https://www.star-history.com/?repos=suryanshkushwaha%2Flahlang&type=date&legend=top-left">
+ <picture>
+	 <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=suryanshkushwaha/lahlang&type=date&theme=dark&legend=top-left" />
+	 <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=suryanshkushwaha/lahlang&type=date&legend=top-left" />
+	 <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=suryanshkushwaha/lahlang&type=date&legend=top-left" />
+ </picture>
+</a>
 
 ---
 
-**For more examples, see the `examples/` folder. For full language reference, see `src/tokens.ts`.**
+## Support
+
+If Lahlang helps you or made you smile, you can support the project here:
+
+- GitHub Sponsors: https://github.com/sponsors/suryanshkushwaha
+- Buy Me a Coffee: https://buymeacoffee.com/suryanshkushwaha
+
+## License
+
+MIT License
 
 ---

@@ -29,7 +29,7 @@ export enum TokenType {
   // ---------------------------------------------------------------------------
   CONFIRM_OR_NOT = "CONFIRM_OR_NOT", // confirm or not     → if
   OR_MAYBE = "OR_MAYBE", // or maybe           → else if
-  IF_NOT_THEN = "IF_NOT_THEN", // if not then        → else
+  ABUDEN = "ABUDEN", // abuden             → else
   WHICH_ONE_LAH = "WHICH_ONE_LAH", // which one lah      → switch
   IF_ITS = "IF_ITS", // if it's            → case
   LAST_RESORT = "LAST_RESORT", // last resort        → default
@@ -90,7 +90,6 @@ export enum TokenType {
   CB_ERROR = "CB_ERROR", // CbError            → mild runtime error 🌶️
   LAN_JIAO_ERROR = "LAN_JIAO_ERROR", // LanJiaoError       → garbage value 🌶️
   CCB_ERROR = "CCB_ERROR", // CcbError           → serious error 🌶️
-  CHAO_CB_ERROR = "CHAO_CB_ERROR", // ChaoCbError        → worst error 🌶️
 
   // ---------------------------------------------------------------------------
   // OPERATORS
@@ -198,7 +197,7 @@ export const KEYWORDS: [string, TokenType][] = [
 
   // Control flow
   ["confirm or not", TokenType.CONFIRM_OR_NOT],
-  ["if not then", TokenType.IF_NOT_THEN],
+  ["abuden", TokenType.ABUDEN],
   ["which one lah", TokenType.WHICH_ONE_LAH],
   ["or maybe", TokenType.OR_MAYBE],
   ["if it's", TokenType.IF_ITS],
@@ -240,7 +239,6 @@ export const KEYWORDS: [string, TokenType][] = [
 
   // Error types
   ["TanKuKuError", TokenType.TAN_KU_KU_ERROR],
-  ["ChaoCbError", TokenType.CHAO_CB_ERROR],
   ["LanJiaoError", TokenType.LAN_JIAO_ERROR],
   ["TokKokError", TokenType.TOK_KOK_ERROR],
   ["WahLauError", TokenType.WAH_LAU_ERROR],
@@ -268,7 +266,6 @@ export const KEYWORDS: [string, TokenType][] = [
   // Types (longest first)
   ["all the things", TokenType.ALL_THE_THINGS],
   ["whole list", TokenType.WHOLE_LIST],
-  ["can cannot", TokenType.CAN_CANNOT],
   ["nombor", TokenType.NOMBOR],
   ["words", TokenType.WORDS],
 
@@ -277,10 +274,6 @@ export const KEYWORDS: [string, TokenType][] = [
   ["eh check this", TokenType.EH_CHECK_THIS],
   ["share out", TokenType.SHARE_OUT],
   ["old liao", TokenType.OLD_LIAO],
-
-  // Comments
-  ["wahlau start", TokenType.MULTILINE_COMMENT],
-  ["wahlau end", TokenType.MULTILINE_COMMENT],
 
   // Statement terminator (must be last — very short, easy false match)
   ["lah", TokenType.LAH],

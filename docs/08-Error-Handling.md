@@ -30,17 +30,18 @@ see how lah {
 
 For when things are truly "gone case", we use more aggressive keywords.
 
-| Singlish Keyword | Description |
-| :--- | :--- |
-| `kan ni na crash` | Unrecoverable crash. |
-| `puki panic` | Nuclear panic button. |
-| `chao cb assert` | Aggressive assertion. |
-| `hong gan lah` | Fatal assertion. |
+| Singlish Keyword  | Description           |
+| :---------------- | :-------------------- |
+| `kan ni na crash` | Unrecoverable crash.  |
+| `puki panic`      | Nuclear panic button. |
+| `chao cb assert`  | Aggressive assertion. |
+| `hong gan lah`    | Fatal assertion.      |
 
 ### Example Assertion:
+
 ```lah
 eh got age = 15;
-chao cb assert (age more than 18, "Too young lah!");
+chao cb assert (age more than 18);
 ```
 
 ---
@@ -49,12 +50,17 @@ chao cb assert (age more than 18, "Too young lah!");
 
 Lahlang has custom error names to help you identify what went wrong:
 
+- `JialatError`: Generic runtime error.
 - `TokKokError`: Syntax error (Talking cock).
 - `SiaoError`: Type error (Are you crazy?).
 - `BoJioError`: Null reference (Nobody invited).
 - `TanKuKuError`: Timeout (Wait long long).
+- `SuayError`: Out-of-bounds style error.
 - `WahLauError`: Stack overflow.
 - `GoneCase`: Fatal crash.
+- `CbError`: Mild runtime error.
+- `LanJiaoError`: Garbage input/value style error.
+- `CcbError`: Serious runtime error.
 
 ---
 

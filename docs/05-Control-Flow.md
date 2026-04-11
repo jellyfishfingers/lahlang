@@ -13,7 +13,7 @@ confirm or not (budget more than 10) {
   oi "Can eat expensive food!";
 } or maybe (budget same same 5) {
   oi "Cai Fan it is.";
-} if not then {
+} abuden {
   oi "Just drink water lah.";
 }
 ```
@@ -21,7 +21,7 @@ confirm or not (budget more than 10) {
 ### Keywords:
 - `confirm or not`: If
 - `or maybe`: Else If
-- `if not then`: Else
+- `abuden`: Else
 
 ---
 
@@ -35,7 +35,7 @@ To compare values, use these Singlish operators:
 | `not same` | `!=` | Not equal to |
 | `more than` | `>` | Greater than |
 | `less than` | `<` | Less than |
-| `more than or same` | `==` | Greater than or equal to |
+| `more than or same` | `>=` | Greater than or equal to |
 | `less than or same` | `<=` | Less than or equal to |
 
 ---

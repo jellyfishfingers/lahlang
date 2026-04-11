@@ -384,11 +384,18 @@ export class Parser {
 
   private parseReassign(): ReassignNode {
     const opToken = this.next();
-    const op = opToken.type === TokenType.EH_CHANGE ? "=" : 
-               opToken.type === TokenType.ADD_SOME_MORE ? "+=" : "-=";
+    const op =
+      opToken.type === TokenType.EH_CHANGE
+        ? "="
+        : opToken.type === TokenType.ADD_SOME_MORE
+          ? "+="
+          : "-=";
     const target = this.parsePrimary();
     if (target.type !== "Identifier" && target.type !== "MemberExpr") {
-      throw new TokKokError(`Invalid assignment target: ${target.type}`, opToken.line);
+      throw new TokKokError(
+        `Invalid assignment target: ${target.type}`,
+        opToken.line,
+      );
     }
     this.expect(TokenType.EQUALS);
     const value = this.parseExpression();
@@ -421,7 +428,7 @@ export class Parser {
       alternates.push({ type: "ElseIf", test: altTest, body: altBody });
     }
     let otherwise = null;
-    if (this.match(TokenType.IF_NOT_THEN)) {
+    if (this.match(TokenType.ABUDEN)) {
       this.next();
       this.expect(TokenType.LBRACE);
       otherwise = this.parseBlock();
@@ -733,7 +740,6 @@ export class Parser {
       case TokenType.CB_ERROR:
       case TokenType.LAN_JIAO_ERROR:
       case TokenType.CCB_ERROR:
-      case TokenType.CHAO_CB_ERROR:
         this.next();
         node = { type: "ErrorLiteral", variant: token.type };
         break;
@@ -813,7 +819,10 @@ export class Parser {
         this.expect(TokenType.LBRACE);
         defaultCase = this.parseBlock();
       } else {
-        throw new TokKokError(`Unexpected token in switch: ${this.peek().type}`, this.peek().line);
+        throw new TokKokError(
+          `Unexpected token in switch: ${this.peek().type}`,
+          this.peek().line,
+        );
       }
     }
     this.expect(TokenType.RBRACE);

@@ -31,7 +31,7 @@ one by one lah (i from 1 to 5) {
 
 ## Foreach Loop: `every one also`
 
-Use this to iterate through lists (arrays) or objects.
+Use this to iterate through lists (arrays).
 
 ### For Lists:
 ```lah
