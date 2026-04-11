@@ -5,11 +5,50 @@ import { Lexer } from "./lexer";
 import { Parser } from "./parser";
 import { Interpreter } from "./interpreter";
 
+// ANSI color codes
+const colors = {
+  reset: "\x1b[0m",
+  bright: "\x1b[1m",
+  dim: "\x1b[2m",
+  red: "\x1b[31m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
+  magenta: "\x1b[35m",
+  cyan: "\x1b[36m",
+  white: "\x1b[37m",
+  bgGreen: "\x1b[42m",
+  bgBlue: "\x1b[44m",
+  bgRed: "\x1b[41m",
+};
+
+function printBanner() {
+  const banner = `
+${colors.cyan}${colors.bright}
+    ██╗      █████╗ ██╗  ██╗██╗      █████╗ ███╗   ██╗ ██████╗ 
+    ██║     ██╔══██╗██║  ██║██║     ██╔══██╗████╗  ██║██╔════╝ 
+    ██║     ███████║███████║██║     ███████║██╔██╗ ██║██║  ███╗
+    ██║     ██╔══██║██╔══██║██║     ██╔══██║██║╚██╗██║██║   ██║
+    ███████╗██║  ██║██║  ██║███████╗██║  ██║██║ ╚████║╚██████╔╝
+    ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+${colors.reset}
+${colors.green}${colors.bright}    v0.2.0 — Can one lah! 🇸🇬${colors.reset}
+
+${colors.yellow}Usage:${colors.reset}
+  ${colors.cyan}lahlang${colors.reset} ${colors.white}<file.lah>${colors.reset}
+
+${colors.yellow}Examples:${colors.reset}
+  ${colors.dim}lahlang hello.lah${colors.reset}
+  ${colors.dim}lahlang fizzbuzz.lah${colors.reset}
+`;
+
+  console.log(banner);
+}
+
 const args = process.argv.slice(2);
 
 if (args.length === 0) {
-  console.log("Lahlang v0.1.0 — Can one lah! 🇸🇬");
-  console.log("Usage: lahlang <file.lah>");
+  printBanner();
   process.exit(0);
 }
 
