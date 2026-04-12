@@ -103,6 +103,8 @@ lah> oi x + 8
 
 Type Singlish code directly — no need for `eh listen lah` / `ok lah bye` wrappers. Multi-line blocks (with `{}`) are supported. Press Ctrl+C to exit.
 
+To close REPL with a keyword, type `bye lah` on its own line.
+
 ## Language Examples
 
 ### Hello World

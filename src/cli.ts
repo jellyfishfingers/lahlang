@@ -68,8 +68,51 @@ if (args.length === 0) {
   printBanner();
   startREPL();
 } else {
-  // Existing file-run logic should remain in this branch so it only runs
-  // when a filename argument is provided.
+  const filePath = path.resolve(args[0]);
+
+  if (!filePath.endsWith(".lah")) {
+    console.error("Eh, only .lah files can one lah!");
+    process.exit(1);
+  }
+
+  if (!fs.existsSync(filePath)) {
+    console.error(`Alamak! Cannot find file: ${filePath}`);
+    process.exit(1);
+  }
+
+  try {
+    const source = fs.readFileSync(filePath, "utf-8");
+
+    const lexer = new Lexer(source);
+    const tokens = lexer.tokenize();
+
+    const parser = new Parser(tokens);
+    const ast = parser.parse();
+
+    const interpreter = new Interpreter();
+    interpreter.run(ast);
+  } catch (err: any) {
+    if (err.name === "TokKokError") {
+      console.error(`[TOK KOK] ${err.message}`);
+    } else if (
+      err.name === "JialatError" ||
+      err.name === "BoJioError" ||
+      err.name === "SiaoError" ||
+      err.name === "CcbError" ||
+      err.name === "CbError" ||
+      err.name === "LanJiaoError"
+    ) {
+      console.error(`[RUNTIME ERROR] ${err.name}: ${err.message}`);
+    } else if (err.name === "GoneCase") {
+      // Already handled in interpreter.run for fatal ones, but if it bubbles up:
+      console.error(`[FATAL] ${err.name}: ${err.message}`);
+    } else {
+      console.error(
+        `[ALAMAK] Something went wrong sia: ${err.name || "Error"}: ${err.message || err}`,
+      );
+    }
+    process.exit(1);
+  }
 }
 
 function startREPL() {
@@ -87,12 +130,17 @@ function startREPL() {
     `${colors.dim}Type Singlish code (no need eh listen lah / ok lah bye).${colors.reset}`,
   );
   console.log(
-    `${colors.dim}Press Ctrl+C to exit.${colors.reset}\n`,
+    `${colors.dim}Type 'bye lah' (or press Ctrl+C) to exit.${colors.reset}\n`,
   );
 
   rl.prompt();
 
   rl.on("line", (line: string) => {
+    if (buffer.trim() === "" && line.trim().toLowerCase() === "bye lah") {
+      rl.close();
+      return;
+    }
+
     buffer += (buffer ? "\n" : "") + line;
 
     for (const ch of line) {
@@ -141,50 +189,4 @@ function startREPL() {
   });
 
   return;
-}
-
-const filePath = path.resolve(args[0]);
-
-if (!filePath.endsWith(".lah")) {
-  console.error("Eh, only .lah files can one lah!");
-  process.exit(1);
-}
-
-if (!fs.existsSync(filePath)) {
-  console.error(`Alamak! Cannot find file: ${filePath}`);
-  process.exit(1);
-}
-
-try {
-  const source = fs.readFileSync(filePath, "utf-8");
-
-  const lexer = new Lexer(source);
-  const tokens = lexer.tokenize();
-
-  const parser = new Parser(tokens);
-  const ast = parser.parse();
-
-  const interpreter = new Interpreter();
-  interpreter.run(ast);
-} catch (err: any) {
-  if (err.name === "TokKokError") {
-    console.error(`[TOK KOK] ${err.message}`);
-  } else if (
-    err.name === "JialatError" ||
-    err.name === "BoJioError" ||
-    err.name === "SiaoError" ||
-    err.name === "CcbError" ||
-    err.name === "CbError" ||
-    err.name === "LanJiaoError"
-  ) {
-    console.error(`[RUNTIME ERROR] ${err.name}: ${err.message}`);
-  } else if (err.name === "GoneCase") {
-    // Already handled in interpreter.run for fatal ones, but if it bubbles up:
-    console.error(`[FATAL] ${err.name}: ${err.message}`);
-  } else {
-    console.error(
-      `[ALAMAK] Something went wrong sia: ${err.name || "Error"}: ${err.message || err}`,
-    );
-  }
-  process.exit(1);
 }
