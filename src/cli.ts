@@ -53,10 +53,6 @@ ${colors.green}${colors.bright}    v${version} — Can one lah! 🇸🇬${colors
 
 ${colors.yellow}Usage:${colors.reset}
   ${colors.cyan}lahlang${colors.reset} ${colors.white}<file.lah>${colors.reset}
-
-${colors.yellow}Examples:${colors.reset}
-  ${colors.dim}lahlang hello.lah${colors.reset}
-  ${colors.dim}lahlang fizzbuzz.lah${colors.reset}
 `;
 
   console.log(banner);
@@ -127,10 +123,7 @@ function startREPL() {
   let braceDepth = 0;
 
   console.log(
-    `${colors.dim}Type Singlish code (no need eh listen lah / ok lah bye).${colors.reset}`,
-  );
-  console.log(
-    `${colors.dim}Type 'bye lah' (or press Ctrl+C) to exit.${colors.reset}\n`,
+    `${colors.dim}REPL mode. Type 'bye lah' (or press Ctrl+C) to exit.${colors.reset}`,
   );
 
   rl.prompt();
