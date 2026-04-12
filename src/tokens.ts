@@ -122,6 +122,25 @@ export enum TokenType {
   ALL_THE_THINGS = "ALL_THE_THINGS", // all the things     → object/dict
 
   // ---------------------------------------------------------------------------
+  // SINGLISH EXPRESSIONS
+  // ---------------------------------------------------------------------------
+  SIAN = "SIAN", // sian               → sleep/delay
+  LEPAK = "LEPAK", // lepak              → pause (synonym)
+  CHOPE = "CHOPE", // chope              → freeze/lock object
+  DIE_DIE_MUST = "DIE_DIE_MUST", // die die must      → strict required assert
+  KAYPOH = "KAYPOH", // kaypoh             → typeof
+  GOSTAN = "GOSTAN", // gostan             → reverse
+  SWEE = "SWEE", // swee               → pretty print
+  AGAK_AGAK = "AGAK_AGAK", // agak agak          → Math.round
+  ACT_BLUR = "ACT_BLUR", // act blur           → silent try (ignore errors)
+  MAKAN = "MAKAN", // makan              → pop/consume from array
+  TABAO = "TABAO", // tabao              → clone/copy
+  SABO = "SABO", // sabo               → delete property
+  HANTAM_LAH = "HANTAM_LAH", // hantam lah         → do (do-while)
+  UNTIL = "UNTIL", // until              → do-while condition
+  JIO = "JIO", // jio                → invoke/call (casual)
+
+  // ---------------------------------------------------------------------------
   // META
   // ---------------------------------------------------------------------------
   CHIONG_BRING_IN = "CHIONG_BRING_IN", // chiong bring in    → import
@@ -268,6 +287,23 @@ export const KEYWORDS: [string, TokenType][] = [
   ["whole list", TokenType.WHOLE_LIST],
   ["nombor", TokenType.NOMBOR],
   ["words", TokenType.WORDS],
+
+  // Singlish expressions (longest first)
+  ["die die must", TokenType.DIE_DIE_MUST],
+  ["hantam lah", TokenType.HANTAM_LAH],
+  ["agak agak", TokenType.AGAK_AGAK],
+  ["act blur", TokenType.ACT_BLUR],
+  ["kaypoh", TokenType.KAYPOH],
+  ["gostan", TokenType.GOSTAN],
+  ["tabao", TokenType.TABAO],
+  ["makan", TokenType.MAKAN],
+  ["chope", TokenType.CHOPE],
+  ["lepak", TokenType.LEPAK],
+  ["until", TokenType.UNTIL],
+  ["sabo", TokenType.SABO],
+  ["swee", TokenType.SWEE],
+  ["sian", TokenType.SIAN],
+  ["jio", TokenType.JIO],
 
   // Meta (longest first)
   ["chiong bring in", TokenType.CHIONG_BRING_IN],

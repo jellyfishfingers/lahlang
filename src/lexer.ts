@@ -87,6 +87,25 @@ export class Lexer {
           if (this.currentChar() === "\n") {
              throw new TokKokError("Unterminated string literal lah!", this.line, this.col);
           }
+          if (this.currentChar() === "\\") {
+            this.pos++;
+            this.col++;
+            if (this.pos >= this.source.length) {
+              throw new TokKokError("Unterminated string literal lah!", this.line, this.col);
+            }
+            const esc = this.currentChar();
+            switch (esc) {
+              case "n": str += "\n"; break;
+              case "t": str += "\t"; break;
+              case "r": str += "\r"; break;
+              case "\\": str += "\\"; break;
+              case '"': str += '"'; break;
+              default: str += "\\" + esc; break;
+            }
+            this.pos++;
+            this.col++;
+            continue;
+          }
           str += this.currentChar();
           this.pos++;
           this.col++;

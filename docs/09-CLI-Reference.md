@@ -10,6 +10,21 @@ The most basic command runs a `.lah` file:
 lahlang my_file.lah
 ```
 
+## REPL Mode
+
+Run Lahlang without arguments to start interactive REPL mode:
+
+```bash
+lahlang
+```
+
+Inside REPL, type code directly (no `eh listen lah` / `ok lah bye` wrappers needed).
+
+To exit REPL:
+
+- Type `bye lah` on its own line (dedicated quit keyword), or
+- Press `Ctrl+C`
+
 ---
 
 ## Debugging Features
@@ -17,6 +32,7 @@ lahlang my_file.lah
 Lahlang provides built-in ways to inspect your code while it's running.
 
 ### 1. `oi listen`
+
 Use `oi listen` instead of `oi` for more verbose or debug-style output.
 
 ```lah
@@ -25,6 +41,7 @@ oi listen secret;
 ```
 
 ### 2. `eh check this`
+
 This keyword is used for deep inspection of variables or objects.
 
 ```lah
@@ -43,6 +60,7 @@ You can also manage imports and exports within your files.
 - `old liao`: Mark a piece of code as deprecated.
 
 ### Example:
+
 ```lah
 chiong bring in "math_utils.lah";
 

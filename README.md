@@ -56,12 +56,16 @@ For a complete guide on how to use Lahlang, check out our extensive documentatio
 ## Features
 
 - **Singlish Syntax:** Keywords like `eh listen lah`, `ok lah bye`, `oi`, `confirm or not`, `keep going lah`, etc.
+- **Interactive REPL:** Run `lahlang` with no arguments to enter the REPL — type Singlish code line by line with multi-line support.
 - **VS Code Support:** Get syntax highlighting with the [Lahlang VS Code Extension](https://marketplace.visualstudio.com/items?itemName=suryanshkushwaha.lahlang-vscode).
 - **Variables & Constants:** `eh got`, `confirm got`
-- **Control Flow:** `confirm or not` (if), `or maybe` (else if), `abuden` (else), `keep going lah` (while), `one by one lah` (for), `every one also` (foreach)
-- **Functions:** `steady lah do this`, `here take`, `eh do this`, `one time only`
-- **Error Handling:** `see how lah`, `aiyoh kena`, `confirm do`, `jialat throw`, `paiseh warn`, `hong gan lah`, `chao cb assert`
+- **Control Flow:** `confirm or not` (if), `or maybe` (else if), `abuden` (else), `keep going lah` (while), `one by one lah` (for), `every one also` (foreach), `hantam lah...until` (do-while)
+- **Functions:** `steady lah do this`, `here take`, `eh do this`, `one time only`, `jio` (casual call)
+- **Error Handling:** `see how lah`, `aiyoh kena`, `confirm do`, `jialat throw`, `paiseh warn`, `hong gan lah`, `chao cb assert`, `act blur` (silent try)
 - **Types:** `words` (string), `nombor` (number), `can cannot` (boolean), `whole list` (array), `all the things` (object)
+- **Singlish Expressions:** `kaypoh` (typeof), `gostan` (reverse), `swee` (pretty print), `agak agak` (round), `makan` (pop), `tabao` (clone), `chope` (freeze), `sabo` (delete), `die die must` (assert), `sian`/`lepak` (sleep)
+- **Built-in Methods:** String methods (`.upper()`, `.lower()`, `.trim()`, `.split()`, etc.), array methods (`.push()`, `.pop()`, `.map()`, `.filter()`, etc.), object methods (`.keys()`, `.values()`, `.entries()`), and global helpers (`panjang`, `to_nombor`, `to_words`, math functions)
+- **String Escapes:** `\n`, `\t`, `\r`, `\\`, `\"` inside double-quoted strings
 - **Operators:** `same same` (==), `not same` (!=), `and also` (&&), `or can` (||), `add some more` (+=), `minus a bit` (-=)
 - **Comments:** `// shiok:` (single-line), `wahlau start ... wahlau end` (multi-line)
 - **Meta:** `chiong bring in` (import), `share out` (export), `eh check this` (debug/inspect)
@@ -82,6 +86,24 @@ Run a `.lah` file:
 ```bash
 lahlang myfile.lah
 ```
+
+Or start the interactive REPL:
+
+```bash
+lahlang
+```
+
+```
+lah> oi "Hello from REPL!"
+Hello from REPL!
+lah> eh got x = 42
+lah> oi x + 8
+50
+```
+
+Type Singlish code directly — no need for `eh listen lah` / `ok lah bye` wrappers. Multi-line blocks (with `{}`) are supported. Press Ctrl+C to exit.
+
+To close REPL with a keyword, type `bye lah` on its own line.
 
 ## Language Examples
 
@@ -146,9 +168,76 @@ eh listen lah
 ok lah bye
 ```
 
+### Singlish Expressions
+
+```lah
+eh listen lah
+	// typeof
+	oi kaypoh "hello";          // "words"
+	oi kaypoh 42;               // "nombor"
+
+	// reverse
+	oi gostan "lahlang";        // "gnalhal"
+	oi gostan [1, 2, 3];        // [3, 2, 1]
+
+	// round
+	oi agak agak 3.7;           // 4
+
+	// pretty print
+	eh got obj = { name: "Ah Beng", age: 25 };
+	swee obj;
+
+	// clone and freeze
+	eh got copy = tabao obj;
+	chope obj;
+
+	// silent error handling
+	act blur {
+		jialat throw "this error is swallowed";
+	}
+
+	// assert
+	die die must (1 + 1 same same 2);
+ok lah bye
+```
+
+### Do-While Loop
+
+```lah
+eh listen lah
+	eh got i = 0;
+	hantam lah {
+		oi i;
+		eh change i = i + 1;
+	} until (i less than 5)
+ok lah bye
+```
+
+### Built-in Methods
+
+```lah
+eh listen lah
+	// String methods
+	eh got s = "hello world";
+	oi s.upper();               // "HELLO WORLD"
+	oi s.split(" ");            // ["hello", "world"]
+	oi panjang(s);              // 11
+
+	// Array methods
+	eh got arr = [3, 1, 2];
+	oi arr.sort();              // [1, 2, 3]
+	oi arr.map(steady lah do this(x) { here take x * 2; });
+
+	// Type conversion
+	oi to_nombor("42");         // 42
+	oi to_words(100);           // "100"
+ok lah bye
+```
+
 ## CLI Options
 
 - `lahlang <file.lah>`: Run a Lahlang program.
+- `lahlang`: Start the interactive REPL.
 - Only `.lah` files are accepted.
 - Errors are reported in Singlish style, e.g. `[TOK KOK]`, `[RUNTIME ERROR]`, `[FATAL]`, `[ALAMAK]`.
 

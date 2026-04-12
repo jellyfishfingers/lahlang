@@ -1,0 +1,74 @@
+eh listen lah
+
+  // shiok: Demonstrate new Singlish keywords
+
+  // shiok: kaypoh (typeof) ---
+  eh got name = "Ah Beng"
+  eh got age = 25
+  eh got is_local = can
+  eh got hobbies = ["makan", "sleep", "code"]
+  eh got profile = { name: "Ah Beng", age: 25 }
+
+  oi "--- kaypoh (typeof) ---"
+  oi kaypoh name
+  oi kaypoh age
+  oi kaypoh is_local
+  oi kaypoh hobbies
+  oi kaypoh profile
+  oi kaypoh bo jio
+
+  // shiok: gostan (reverse) ---
+  oi "--- gostan (reverse) ---"
+  oi gostan "hello"
+  oi gostan [1, 2, 3, 4, 5]
+
+  // shiok: agak agak (round) ---
+  oi "--- agak agak (round) ---"
+  oi agak agak 3.7
+  oi agak agak 3.2
+  oi agak agak 3.5
+
+  // shiok: tabao (clone) ---
+  oi "--- tabao (clone) ---"
+  eh got original = [1, 2, 3]
+  eh got copy = tabao original
+  eh got r = copy.push(4)
+  oi original
+  oi copy
+
+  // shiok: makan (pop) ---
+  oi "--- makan (pop) ---"
+  eh got foods = ["chicken rice", "laksa", "nasi lemak"]
+  eh got eaten = makan foods
+  oi eaten
+  oi foods
+
+  // shiok: swee (pretty print) ---
+  oi "--- swee (pretty print) ---"
+  swee { name: "Ah Beng", age: 25, hobbies: ["code", "eat"] }
+
+  // shiok: chope (freeze) ---
+  oi "--- chope (freeze) ---"
+  eh got settings = { theme: "dark", lang: "singlish" }
+  chope settings
+  oi settings
+
+  // shiok: act blur (silent try) ---
+  oi "--- act blur (silent try) ---"
+  act blur {
+    jialat throw "This error is silently ignored!"
+  }
+  oi "Still running after act blur!"
+
+  // shiok: die die must (strict assert) ---
+  oi "--- die die must (assert) ---"
+  die die must can
+  oi "Assertion passed!"
+
+  // shiok: sian (sleep) ---
+  oi "--- sian (sleep) ---"
+  oi "Sleeping for 100ms..."
+  sian 100
+  oi "Woke up already!"
+
+ok lah bye
