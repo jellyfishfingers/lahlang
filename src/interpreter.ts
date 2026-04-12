@@ -152,6 +152,59 @@ export class Interpreter {
     }
   }
 
+  private deepCloneValue(
+    value: unknown,
+    seen: WeakSet<object> = new WeakSet(),
+  ): unknown {
+    if (value === null || value === undefined) {
+      return value;
+    }
+
+    const valueType = typeof value;
+    if (
+      valueType === "string" ||
+      valueType === "number" ||
+      valueType === "boolean" ||
+      valueType === "bigint" ||
+      valueType === "symbol" ||
+      valueType === "function"
+    ) {
+      return value;
+    }
+
+    if (seen.has(value as object)) {
+      throw new SiaoError("Tabao cannot clone circular structures lah!");
+    }
+
+    seen.add(value as object);
+
+    if (Array.isArray(value)) {
+      return value.map((item) => this.deepCloneValue(item, seen));
+    }
+
+    if (value instanceof Date) {
+      return new Date(value.getTime());
+    }
+
+    if (value instanceof RegExp) {
+      return new RegExp(value.source, value.flags);
+    }
+
+    const proto = Object.getPrototypeOf(value);
+    if (proto === Object.prototype || proto === null) {
+      const clone: Record<string, unknown> = {};
+      for (const key of Object.keys(value as Record<string, unknown>)) {
+        clone[key] = this.deepCloneValue(
+          (value as Record<string, unknown>)[key],
+          seen,
+        );
+      }
+      return clone;
+    }
+
+    throw new SiaoError("Tabao cannot clone this kind of value lah!");
+  }
+
   private evaluate(node: ASTNode): unknown {
     if ((node as any).isDeprecated) {
       console.warn(
@@ -617,7 +670,9 @@ export class Interpreter {
             case "flat": return obj.flat(args[0] as number ?? 1);
             case "every": return obj.every(args[0] as any);
             case "some": return obj.some(args[0] as any);
-            case "reduce": return obj.reduce(args[0] as any, args[1]);
+            case "reduce": return args.length > 1
+              ? obj.reduce(args[0] as any, args[1])
+              : obj.reduce(args[0] as any);
             case "forEach": obj.forEach(args[0] as any); return;
           }
         }
@@ -639,8 +694,9 @@ export class Interpreter {
       }
       case "Sleep": {
         const ms = Number(this.evaluate(node.duration));
-        const end = Date.now() + ms;
-        while (Date.now() < end) { /* busy wait */ }
+        const timeout = Math.max(0, Math.trunc(ms));
+        const sleepBuffer = new Int32Array(new SharedArrayBuffer(4));
+        Atomics.wait(sleepBuffer, 0, 0, timeout);
         return;
       }
       case "Chope": {
@@ -720,7 +776,7 @@ export class Interpreter {
       }
       case "TabaoExpr": {
         const val = this.evaluate(node.expr);
-        return JSON.parse(JSON.stringify(val));
+        return this.deepCloneValue(val);
       }
       case "Import": {
         const n = node as ImportNode;

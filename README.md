@@ -56,7 +56,7 @@ For a complete guide on how to use Lahlang, check out our extensive documentatio
 ## Features
 
 - **Singlish Syntax:** Keywords like `eh listen lah`, `ok lah bye`, `oi`, `confirm or not`, `keep going lah`, etc.
-- **Interactive REPL:** Run `lah` with no arguments to enter the REPL — type Singlish code line by line with multi-line support.
+- **Interactive REPL:** Run `lahlang` with no arguments to enter the REPL — type Singlish code line by line with multi-line support.
 - **VS Code Support:** Get syntax highlighting with the [Lahlang VS Code Extension](https://marketplace.visualstudio.com/items?itemName=suryanshkushwaha.lahlang-vscode).
 - **Variables & Constants:** `eh got`, `confirm got`
 - **Control Flow:** `confirm or not` (if), `or maybe` (else if), `abuden` (else), `keep going lah` (while), `one by one lah` (for), `every one also` (foreach), `hantam lah...until` (do-while)

@@ -67,6 +67,9 @@ const args = process.argv.slice(2);
 if (args.length === 0) {
   printBanner();
   startREPL();
+} else {
+  // Existing file-run logic should remain in this branch so it only runs
+  // when a filename argument is provided.
 }
 
 function startREPL() {
